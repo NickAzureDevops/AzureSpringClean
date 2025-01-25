@@ -1,0 +1,56 @@
+{
+  "properties": {
+    "displayName": "AzureSpringClean Resource Location Policy",
+    "policyType": "Custom",
+    "mode": "Indexed",
+    "parameters": {
+      "listOfAllowedLocations": {
+        "defaultValue": [
+          "uksouth",
+          "global",
+          "UK South"
+        ],
+        "type": "Array",
+        "metadata": {
+          "displayName": "Allowed Locations",
+          "description": "Permitted AzureSpringClean Regions",
+          "strongType": "location"
+        }
+      },
+      "excludedResourceTypes": {
+        "defaultValue": [
+          "Microsoft.AzureActiveDirectory/b2cDirectories",
+          "Microsoft.Cdn/profiles",
+          "Microsoft.Cdn/profiles/endpoints",
+          "Microsoft.Cdn/profiles",
+          "microsoft.insights/scheduledqueryrules"
+        ],
+        "type": "Array",
+        "metadata": {
+          "displayName": "Resource Types to exclude",
+          "description": "Resource Types to exclude from compliance results"
+        }
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "notIn": "[parameters('excludedResourceTypes')]"
+          },
+          {
+            "field": "location",
+            "notIn": "[parameters('listOfAllowedLocations')]"
+          }
+        ]
+      },
+      "then": {
+        "effect": "deny"
+      }
+    }
+  },
+  "id": "/providers/Microsoft.Management/managementGroups/HMCTS/providers/Microsoft.Authorization/policyDefinitions/AzureSpringCleanResourceLocationPolicy",
+  "type": "Microsoft.Authorization/policyDefinitions",
+  "name": "AzureSpringCleanResourceLocationPolicy"
+}
