@@ -16,7 +16,8 @@ resource "azurerm_public_ip" "pub" {
   name                = "pip-azurespringclean2025"
   location            = var.location
   resource_group_name = azurerm_resource_group.this.name
-  allocation_method   = "Dynamic"
+  allocation_method   = "Static"
+  sku                 = "Standard"
 }
 
 resource "azurerm_network_interface" "nic" {
