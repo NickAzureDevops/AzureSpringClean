@@ -1,12 +1,13 @@
-provider "azurerm" {
-  features {}
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = ">= 3.7"
+    }
+  }
+  backend "azurerm" {}
 }
 
-terraform {
-  backend "azurerm" {
-    resource_group_name   = var.backendAzureRmResourceGroupName
-    storage_account_name  = var.backendAzureRmStorageAccountName
-    container_name        = var.backendAzureRmContainerName
-    key                   = var.backendAzureRmKey
-  }
+provider "azurerm" {
+  features {}
 }

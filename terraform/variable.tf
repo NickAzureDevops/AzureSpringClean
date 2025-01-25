@@ -22,23 +22,3 @@ variable "vnet_address_space" {
 variable "subnet_address_space" {
   default     = ["10.0.2.0/24"]
 }
-
-variable "backendAzureRmResourceGroupName" {
-  description = "The name of the resource group where the backend storage account is located."
-  type        = string
-}
-
-variable "backendAzureRmStorageAccountName" {
-  description = "The name of the storage account for the backend."
-  type        = string
-}
-
-variable "backendAzureRmContainerName" {
-  description = "The name of the container in the storage account for the backend."
-  type        = string
-}
-
-variable "backendAzureRmKey" {
-  description = "The name of the state file in the backend container."
-  type        = string
-}
