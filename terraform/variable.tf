@@ -4,6 +4,12 @@ variable "location" {
   default     = "uksouth"
 }
 
+variable "adminuser" {
+  description = "The admin username for the Windows Virtual Machine."
+  type        = string
+  default     = "adminuser"
+}
+
 variable "admin_password" {
   type        = string
   description = "The password for the Windows Virtual Machine."

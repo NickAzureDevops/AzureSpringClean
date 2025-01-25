@@ -9,11 +9,11 @@ resource "azurerm_windows_virtual_machine" "vm" {
   location            = var.location
   size                = "Standard_DS1_v2"
 
-  admin_username = adminuser
+  admin_username = var.adminuser
   admin_password = var.admin_password
 
   network_interface_ids = [
-    azurerm_network_interface.example.id,
+    azurerm_network_interface.nic.id,
   ]
 
   os_disk {
