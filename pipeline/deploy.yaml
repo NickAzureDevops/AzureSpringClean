@@ -61,8 +61,6 @@ stages:
           provider: 'azurerm'
           command: 'validate'
           workingDirectory: '$(workingDirectory)'
-        env:
-          ARM_USE_AZUREAD: true
       
       - task: TerraformTaskV4@4
         displayName: 'terraform plan'
