@@ -43,6 +43,7 @@ stages:
 
 - stage: 'ApplyAzurePolicySubscription'
   displayName: 'Apply Azure Policy Subscription'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
   - job: 'ApplyAzurePolicySubscription'
     displayName: 'Apply Azure Policy Subscription'
@@ -55,3 +56,16 @@ stages:
         azureSubscription: '$(serviceConnection)'
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
+        inlineScript: |
+          export SUB="$(subscriptionId)"
+          export policiesDirectory='$(policiesDirectory)'
+          export assignmentsDirectory='$(assignmentsDirectory)'
+          ./pipeline-scripts/sandbox-override.sh
+
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: '$(serviceConnection)'
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az policy state trigger-scan --resource '/subscriptions/$(subscriptionId)'
