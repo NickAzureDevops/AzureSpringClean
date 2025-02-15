@@ -1,10 +1,10 @@
 #!/bin/bash
 set -ex
 
-SUB_ASSIGNMENTS=$(find ./assignments/$SUB -type f -name 'assign.*.json')
+SUB_ASSIGNMENTS=$(find ./assignments/subscriptions/$SUB -type f -name 'assign.*.json')
 POLICIES=$(find ./policies -name policy.json -type f)
 ENVIRONMENT=${ENVIRONMENT:-Sandbox}
-ASSIGNMENTS_DIR="./${ENVIRONMENT}/assignments"
+ASSIGNMENTS_DIR="./${ENVIRONMENT}/assignments/subscriptions/$SUB"
 POLICIES_DIR="./${ENVIRONMENT}/policies"
 
 mkdir -p ${ASSIGNMENTS_DIR} ${POLICIES_DIR}
