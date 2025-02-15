@@ -17,10 +17,9 @@ for policy in ${POLICIES}; do
 
     echo "Creating file: ${POLICIES_DIR}/${DIR}/${FILE}"
     npx json -f ${policy} \
-    -e 'this.name=this.name + process.env.ENVIRONMENT' \
-    -e 'this.properties.displayName=this.properties.displayName + " - " + process.env.ENVIRONMENT' \
-    -e 'this.id=process.env.SUB + "/providers/Microsoft.Authorization/policyDefinitions/" + this.name' > ${POLICIES_DIR}/${DIR}/${FILE}
-
+    -e 'this.name += process.env.ENVIRONMENT' \
+    -e 'this.properties.displayName += " - " + process.env.ENVIRONMENT' \
+    -e 'this.id = process.env.SUB + "/providers/Microsoft.Authorization/policyDefinitions/" + this.name' > ${POLICIES_DIR}/${DIR}/${FILE}
 done
 
 echo "Creating Sandbox Subscription Assignments"
@@ -31,13 +30,12 @@ for assignment in ${SUB_ASSIGNMENTS}; do
 
     echo "Creating file: ${ASSIGNMENTS_DIR}/${DIR}/${FILE}"
     npx json -f ${assignment} \
-    -e 'this.properties.scope=process.env.SUB' \
-    -e 'this.name=this.name + "_" + process.env.ENVIRONMENT' \
-    -e 'this.properties.displayName=this.properties.displayName + " - " + process.env.ENVIRONMENT' \
-    -e 'this.properties.policyDefinitionId=process.env.SUB + "/providers/Microsoft.Authorization/policyDefinitions/" + this.properties.policyDefinitionId.split("/").pop() + process.env.ENVIRONMENT' \
-    -e 'this.properties.notScopes=[]' \
-    -e 'this.id=process.env.SUB + "/providers/Microsoft.Authorization/policyAssignments/" + this.name' > ${ASSIGNMENTS_DIR}/${DIR}/${FILE}
-
+    -e 'this.properties.scope = process.env.SUB' \
+    -e 'this.name += "_" + process.env.ENVIRONMENT' \
+    -e 'this.properties.displayName += " - " + process.env.ENVIRONMENT' \
+    -e 'this.properties.policyDefinitionId = process.env.SUB + "/providers/Microsoft.Authorization/policyDefinitions/" + this.properties.policyDefinitionId.split("/").pop() + process.env.ENVIRONMENT' \
+    -e 'this.properties.notScopes = []' \
+    -e 'this.id = process.env.SUB + "/providers/Microsoft.Authorization/policyAssignments/" + this.name' > ${ASSIGNMENTS_DIR}/${DIR}/${FILE}
 done
 
 echo "Deploying Policies and Assignments"
