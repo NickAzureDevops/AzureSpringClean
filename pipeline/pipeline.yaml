@@ -8,8 +8,8 @@ variables:
   policiesDirectory: "$(System.DefaultWorkingDirectory)/policies/"
   assignmentsDirectory: "$(System.DefaultWorkingDirectory)/assignments/subscriptions/"
   serviceConnection: 'SP'
+  sandboxSubscriptionId: '64681aa1-73cc-4155-aa97-caa0e4837412'
   subscriptionId: '64681aa1-73cc-4155-aa97-caa0e4837412'
-  sandboxSubscriptionId: 'b72ab7b7-723f-4b18-b6f6-03b0f2c6a1bb'
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -17,7 +17,6 @@ pool:
 stages:
 - stage: ApplyAzurePolicySandbox
   displayName: 'Apply Azure Policy Sandbox'
-  condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
   jobs:
     - job: ApplyAzurePolicySandbox
       displayName: 'Apply Azure Policy Sandbox'
