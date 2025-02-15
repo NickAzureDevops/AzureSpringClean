@@ -1,0 +1,26 @@
+{
+  "properties": {
+    "displayName": "Deny Public IPs on Virtual Machines",
+    "policyType": "Custom",
+    "mode": "All",
+    "description": "Prevent deployment of publicly exposed VMs.",
+    "parameters": {},
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.Network/publicIPAddresses"
+          },
+          {
+            "field": "Microsoft.Network/publicIPAddresses/ipAddress",
+            "notEquals": null
+          }
+        ]
+      },
+      "then": {
+        "effect": "deny"
+      }
+    }
+  }
+}

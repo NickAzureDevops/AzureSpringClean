@@ -1,0 +1,80 @@
+{
+  "properties": {
+    "displayName": "Tagging",
+    "policyType": "Custom",
+    "mode": "Indexed",
+    "parameters": {
+      "excludedResourceTypes": {
+        "defaultValue": [
+          "Microsoft.Compute/virtualMachines/extensions",
+          "Microsoft.ContainerRegistry/registries/tasks",
+          "Microsoft.Security/automations"
+        ],
+        "type": "Array",
+        "metadata": {
+          "displayName": "Resource Types to exclude",
+          "description": "Resource Types to exclude from compliance results"
+        }
+      },
+      "allowedEnvironmentNames": {
+        "defaultValue": [
+          "sandbox"
+        ],
+        "type": "Array",
+        "metadata": {
+          "displayName": "Allowed environment Names",
+          "description": "Allowed environment names such as production or staging"
+        }
+      },
+      "RequiredTags": {
+        "type": "Array",
+        "defaultValue": [
+          "environment",
+          "application"
+        ],
+        "metadata": {
+          "displayName": "Required Tags",
+          "description": "The list of Required tags for resources."
+        }
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "notIn": "[parameters('excludedResourceTypes')]"
+          },
+          {
+            "anyOf": [
+              {
+                "count": {
+                  "value": "[parameters('RequiredTags')]",
+                  "where": {
+                    "field": "tags",
+                    "notContainsKey": "[current()]"
+                  }
+                },
+                "greater": 0
+              },
+              {
+                "field": "tags['environment']",
+                "notIn": "[parameters('allowedEnvironmentNames')]"
+              },
+              {
+                "field": "tags['businessArea']",
+                "notIn": "[parameters('allowedBusinessAreaNames')]"
+              }
+            ]
+          }
+        ]
+      },
+      "then": {
+        "effect": "deny"
+      }
+    }
+  },
+  "id": "/providers/Microsoft.Management/managementGroups/HMCTS/providers/Microsoft.Authorization/policyDefinitions/ASCTagging",
+  "type": "Microsoft.Authorization/policyDefinitions",
+  "name": "ASCTagging"
+}

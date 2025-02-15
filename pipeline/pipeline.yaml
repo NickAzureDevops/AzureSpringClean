@@ -1,47 +1,66 @@
-name: manage-azure-policy
+trigger:
+- master
 
-on:
-  push:
-    branches: [master]
-  pull_request:
+pr:
+- '*'
 
-jobs:
-  apply-azure-policy:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+variables:
+  policiesDirectory: "$(System.DefaultWorkingDirectory)/policies/"
+  assignmentsDirectory: "$(System.DefaultWorkingDirectory)/assignments/subscriptions/"
+  serviceConnection: 'SP'
+  subscriptionId: '64681aa1-73cc-4155-aa97-caa0e4837412'
 
-    - name: Login to Azure
-      uses: azure/login@v2
-      with:
-        creds: ${{secrets.AZURE_CREDENTIALS}}
+pool:
+  vmImage: 'ubuntu-latest'
 
-    - name: Create or Update Azure Policies
-      run: |
-        terraform init
-        terraform apply -auto-approve
-      env:
-        AZURE_CREDENTIALS: ${{secrets.AZURE_CREDENTIALS}}
+stages:
+- stage: ApplyAzurePolicy
+  displayName: 'Apply Azure Policy'
+  jobs:
+    - job: ApplyAzurePolicy
+      displayName: 'Apply Azure Policy'
+      steps:
+      - checkout: self
+        clean: true
 
-    - name: Evaluate Azure Policy Compliance
-      run: |
-        az policy assignment list --query "[?policyDefinitionId=='/providers/Microsoft.Authorization/policySetDefinitions/enable-monitoring-defender-cloud']"
-      env:
-        AZURE_CREDENTIALS: ${{secrets.AZURE_CREDENTIALS}}
+      - task: AzureCLI@2
+        inputs:
+          azureSubscription: '$(serviceConnection)'
+          scriptType: 'bash'
+          scriptLocation: 'scriptPath'
+          scriptPath: 'pipeline-scripts/sandbox-override.sh'
+          env:
+            SUB: '64681aa1-73cc-4155-aa97-caa0e4837412'
+            policiesDirectory: '$(policiesDirectory)'
+            assignmentsDirectory: '$(assignmentsDirectory)'
 
-    - name: Deploy Resources
-      run: |
-        az deployment group create --resource-group myResourceGroup --template-file azuredeploy.json
-      env:
-        AZURE_CREDENTIALS: ${{secrets.AZURE_CREDENTIALS}}
+      - task: AzureCLI@2
+        inputs:
+          azureSubscription: '$(serviceConnection)'
+          scriptType: 'bash'
+          scriptLocation: 'inlineScript'
+          inlineScript: |
+            compliance=$(az policy state list --query "[?complianceState=='NonCompliant']")
+            if [ -n "$compliance" ]; then
+              echo "Non-compliant resources found. Halting deployment."
+              exit 1
+            fi
 
-    - name: Check Compliance
-      run: |
-        compliance=$(az policy state list --query "[?complianceState=='NonCompliant']")
-        if [ -n "$compliance" ]; then
-          echo "Non-compliant resources found. Halting deployment."
-          exit 1
-        fi
-      env:
-        AZURE_CREDENTIALS: ${{secrets.AZURE_CREDENTIALS}}
+- stage: DeployResources
+  displayName: 'Deploy Resources'
+  dependsOn: ApplyAzurePolicy
+  condition: succeeded()
+  jobs:
+    - job: DeployResources
+      displayName: 'Deploy Resources'
+      steps:
+      - checkout: self
+        clean: true
+
+      - task: AzureCLI@2
+        inputs:
+          azureSubscription: '$(serviceConnection)'
+          scriptType: 'bash'
+          scriptLocation: 'inlineScript'
+          inlineScript: |
+            az deployment group create --resource-group myResourceGroup --template-file azuredeploy.json
