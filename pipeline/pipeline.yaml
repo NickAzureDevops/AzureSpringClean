@@ -1,5 +1,5 @@
 trigger:
-- '*'
+- none
 
 variables:
   policiesDirectory: "$(System.DefaultWorkingDirectory)/policies/"
