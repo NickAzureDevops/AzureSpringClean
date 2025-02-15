@@ -20,5 +20,8 @@
     "metadata": {
       "category": "Network"
     }
-  }
+  },
+  "id": "/subscriptions/64681aa1-73cc-4155-aa97-caa0e4837412/providers/Microsoft.Authorization/policyDefinitions/deny-public-ip",
+  "type": "Microsoft.Authorization/policyDefinitions",
+  "name": "deny-public-ip"
 }
