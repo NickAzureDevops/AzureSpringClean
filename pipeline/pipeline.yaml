@@ -1,8 +1,5 @@
-triggers:
-- master
-
-pr:
-- '*'
+trigger:
+- none
 
 variables:
   policiesDirectory: "$(System.DefaultWorkingDirectory)/policies/"
