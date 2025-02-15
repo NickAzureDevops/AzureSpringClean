@@ -2,11 +2,10 @@ trigger:
 - '*'
 
 variables:
-  policiesDirectory: "$(System.DefaultWorkingDirectory)/policies/"
-  assignmentsDirectory: "$(System.DefaultWorkingDirectory)/assignments/subscriptions/"
   serviceConnection: 'SP'
   sandboxSubscriptionId: '64681aa1-73cc-4155-aa97-caa0e4837412'
   subscriptionId: '64681aa1-73cc-4155-aa97-caa0e4837412'
+  environment: 'Sandbox'
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -27,11 +26,21 @@ stages:
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
         inlineScript: |
-          export ENVIRONMENT="Sandbox"
           export SUB="$(sandboxSubscriptionId)"
-          export policiesDirectory='$(policiesDirectory)'
-          export assignmentsDirectory='$(assignmentsDirectory)'
-          ./pipeline-scripts/sandbox-override.sh
+          export ENVIRONMENT="$(environment)"
+
+          policies=$(find ./policies -name policy.json -type f)
+          assignments=$(find ./assignments/subscriptions/$SUB -type f -name 'assign.*.json')
+
+          for policy in ${policies}; do
+            policy_name=$(basename "${policy}" .json)$(echo $ENVIRONMENT | tr '[:upper:]' '[:lower:]')
+            az policy definition create --name $policy_name --rules "${policy}" --mode All --display-name "${policy_name} - $ENVIRONMENT" --description "Policy from ${policy}"
+          done
+
+          for assignment in ${assignments}; do
+            assignment_name=$(basename "${assignment}" .json)_$ENVIRONMENT
+            az policy assignment create --name $assignment_name --policy "$(jq -r '.properties.policyDefinitionId' "${assignment}")" --scope "/subscriptions/$SUB" --display-name "$assignment_name"
+          done
 
     - task: AzureCLI@2
       inputs:
@@ -58,9 +67,20 @@ stages:
         scriptLocation: 'inlineScript'
         inlineScript: |
           export SUB="$(subscriptionId)"
-          export policiesDirectory='$(policiesDirectory)'
-          export assignmentsDirectory='$(assignmentsDirectory)'
-          ./pipeline-scripts/sandbox-override.sh
+          export ENVIRONMENT="Production"
+
+          policies=$(find ./policies -name policy.json -type f)
+          assignments=$(find ./assignments/subscriptions/$SUB -type f -name 'assign.*.json')
+
+          for policy in ${policies}; do
+            policy_name=$(basename "${policy}" .json)$(echo $ENVIRONMENT | tr '[:upper:]' '[:lower:]')
+            az policy definition create --name $policy_name --rules "${policy}" --mode All --display-name "${policy_name} - $ENVIRONMENT" --description "Policy from ${policy}"
+          done
+
+          for assignment in ${assignments}; do
+            assignment_name=$(basename "${assignment}" .json)_$ENVIRONMENT
+            az policy assignment create --name $assignment_name --policy "$(jq -r '.properties.policyDefinitionId' "${assignment}")" --scope "/subscriptions/$SUB" --display-name "$assignment_name"
+          done
 
     - task: AzureCLI@2
       inputs:
