@@ -29,13 +29,13 @@ stages:
         inputs:
           azureSubscription: '$(serviceConnection)'
           scriptType: 'bash'
-          scriptLocation: 'scriptPath'
-          scriptPath: 'pipeline-scripts/sandbox-override.sh'
-          env:
-            ENVIRONMENT: "Sandbox"
-            SUB: "$(sandboxSubscriptionId)"
-            policiesDirectory: '$(policiesDirectory)'
-            assignmentsDirectory: '$(assignmentsDirectory)'
+          scriptLocation: 'inlineScript'
+          inlineScript: |
+            export ENVIRONMENT="Sandbox"
+            export SUB="$(sandboxSubscriptionId)"
+            export policiesDirectory='$(policiesDirectory)'
+            export assignmentsDirectory='$(assignmentsDirectory)'
+            ./pipeline-scripts/sandbox-override.sh
 
       - task: AzureCLI@2
         inputs:
@@ -59,12 +59,12 @@ stages:
         inputs:
           azureSubscription: '$(serviceConnection)'
           scriptType: 'bash'
-          scriptLocation: 'scriptPath'
-          scriptPath: 'pipeline-scripts/sandbox-override.sh'
-          env:
-            SUB: "$(subscriptionId)"
-            policiesDirectory: '$(policiesDirectory)'
-            assignmentsDirectory: '$(assignmentsDirectory)'
+          scriptLocation: 'inlineScript'
+          inlineScript: |
+            export SUB="$(subscriptionId)"
+            export policiesDirectory='$(policiesDirectory)'
+            export assignmentsDirectory='$(assignmentsDirectory)'
+            ./pipeline-scripts/sandbox-override.sh
 
       - task: AzureCLI@2
         inputs:
