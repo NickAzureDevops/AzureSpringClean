@@ -2,9 +2,11 @@ trigger:
 - '*'
 
 variables:
+  policiesDirectory: "$(System.DefaultWorkingDirectory)/policies/"
+  assignmentsDirectory: "$(System.DefaultWorkingDirectory)/assignments/subscriptions/"
   serviceConnection: 'SP'
+  sandboxSubscriptionId: '64681aa1-73cc-4155-aa97-caa0e4837412'
   subscriptionId: '64681aa1-73cc-4155-aa97-caa0e4837412'
-  environment: 'Sandbox'
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -27,9 +29,9 @@ stages:
         inlineScript: |
           set -ex
           export SUB="$(subscriptionId)"
-          export ENVIRONMENT="$(environment)"
-          export POLICIES_DIR="./policies"
-          export ASSIGNMENTS_DIR="./assignments/subscriptions/$SUB"
+          export ENVIRONMENT="Sandbox"
+          export POLICIES_DIR="$(policiesDirectory)"
+          export ASSIGNMENTS_DIR="$(assignmentsDirectory)/$SUB"
 
           echo "Deploying Policies"
           for policy in $(find ${POLICIES_DIR} -name '*.json' -type f); do
