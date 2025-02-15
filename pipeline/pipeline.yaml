@@ -1,7 +1,4 @@
 trigger:
-- master
-
-pr:
 - '*'
 
 variables:
@@ -15,60 +12,46 @@ pool:
   vmImage: 'ubuntu-latest'
 
 stages:
-- stage: ApplyAzurePolicySandbox
+- stage: 'ApplyAzurePolicySandbox'
   displayName: 'Apply Azure Policy Sandbox'
   jobs:
-    - job: ApplyAzurePolicySandbox
-      displayName: 'Apply Azure Policy Sandbox'
-      steps:
-      - checkout: self
-        clean: true
+  - job: 'ApplyAzurePolicySandbox'
+    displayName: 'Apply Azure Policy Sandbox'
+    steps:
+    - checkout: self
+      clean: true
 
-      - task: AzureCLI@2
-        inputs:
-          azureSubscription: '$(serviceConnection)'
-          scriptType: 'bash'
-          scriptLocation: 'inlineScript'
-          inlineScript: |
-            export ENVIRONMENT="Sandbox"
-            export SUB="$(sandboxSubscriptionId)"
-            export policiesDirectory='$(policiesDirectory)'
-            export assignmentsDirectory='$(assignmentsDirectory)'
-            ./pipeline-scripts/sandbox-override.sh
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: '$(serviceConnection)'
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          export ENVIRONMENT="Sandbox"
+          export SUB="$(sandboxSubscriptionId)"
+          export policiesDirectory='$(policiesDirectory)'
+          export assignmentsDirectory='$(assignmentsDirectory)'
+          ./pipeline-scripts/sandbox-override.sh
 
-      - task: AzureCLI@2
-        inputs:
-          azureSubscription: '$(serviceConnection)'
-          scriptType: 'bash'
-          scriptLocation: 'inlineScript'
-          inlineScript: |
-            az policy state trigger-scan --resource '/subscriptions/$(sandboxSubscriptionId)'
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: '$(serviceConnection)'
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az policy state trigger-scan --resource '/subscriptions/$(sandboxSubscriptionId)'
 
-- stage: ApplyAzurePolicySubscription
+- stage: 'ApplyAzurePolicySubscription'
   displayName: 'Apply Azure Policy Subscription'
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
-    - job: ApplyAzurePolicySubscription
-      displayName: 'Apply Azure Policy Subscription'
-      steps:
-      - checkout: self
-        clean: true
+  - job: 'ApplyAzurePolicySubscription'
+    displayName: 'Apply Azure Policy Subscription'
+    steps:
+    - checkout: self
+      clean: true
 
-      - task: AzureCLI@2
-        inputs:
-          azureSubscription: '$(serviceConnection)'
-          scriptType: 'bash'
-          scriptLocation: 'inlineScript'
-          inlineScript: |
-            export SUB="$(subscriptionId)"
-            export policiesDirectory='$(policiesDirectory)'
-            export assignmentsDirectory='$(assignmentsDirectory)'
-            ./pipeline-scripts/sandbox-override.sh
-
-      - task: AzureCLI@2
-        inputs:
-          azureSubscription: '$(serviceConnection)'
-          scriptType: 'bash'
-          scriptLocation: 'inlineScript'
-          inlineScript: |
-            az policy state trigger-scan --resource '/subscriptions/$(subscriptionId)'
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: '$(serviceConnection)'
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
