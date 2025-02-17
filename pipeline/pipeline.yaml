@@ -11,41 +11,44 @@ pool:
   vmImage: 'ubuntu-latest'
 
 stages:
-- stage: DeployPolicies
+- stage: deploy_policies
   displayName: 'Deploy Azure Policies'
   jobs:
-  - job: Deploy
-    displayName: 'Deploy Policy Definitions and Assignments'
-    steps:
-    - checkout: self
-
-    - task: AzureCLI@2
+    - job: Deploy
       displayName: 'Deploy Policy Definitions and Assignments'
-      inputs:
-        azureSubscription: '$(serviceConnection)'
-        scriptType: 'bash'
-        scriptLocation: 'scriptPath'
-        scriptPath: 'pipeline-scripts/deploy-policies.sh'
-        arguments: '$(subscriptionId) $(policiesDirectory) $(assignmentsDirectory)/$(subscriptionId)'
+      steps:
+        - checkout: self
 
-    - task: AzureCLI@2
-      displayName: 'Trigger Compliance Scan'
-      inputs:
-        azureSubscription: '$(serviceConnection)'
-        scriptType: 'bash'
-        scriptLocation: 'inlineScript'
-        inlineScript: |
-          az policy state trigger-scan
+        - task: AzureCLI@2
+          displayName: 'Deploy Policy Definitions and Assignments'
+          inputs:
+            azureSubscription: '$(serviceConnection)'
+            scriptType: 'bash'
+            scriptLocation: 'scriptPath'
+            scriptPath: 'pipeline-scripts/deploy-policies.sh'
+            arguments: '$(subscriptionId) $(policiesDirectory) $(assignmentsDirectory)/$(subscriptionId)'
 
-- stage: DeployPolicies
-  displayName: 'Deploy Azure Policies'
+        - task: AzureCLI@2
+          displayName: 'Trigger Compliance Scan'
+          inputs:
+            azureSubscription: '$(serviceConnection)'
+            scriptType: 'bash'
+            scriptLocation: 'inlineScript'
+            inlineScript: |
+              az policy state trigger-scan
+
+- stage: deploy_security_devops
+  displayName: 'Deploy Security DevOps'
   jobs:
-  - task: MicrosoftSecurityDevOps@1
-    displayName: 'Microsoft Security DevOps'
-    inputs:
-      policy: 'azuredevops'
-      categories: 'IaC'
-      tools: 'checkov, terrascan'
-      break: true
-      publish: true
-      artifactName: 'CodeAnalysisLogs'
+    - job: DeploySecurity
+      displayName: 'Microsoft Security DevOps'
+      steps:
+        - task: MicrosoftSecurityDevOps@1
+          displayName: 'Microsoft Security DevOps'
+          inputs:
+            policy: 'azuredevops'
+            categories: 'IaC'
+            tools: 'checkov, terrascan'
+            break: true
+            publish: true
+            artifactName: 'CodeAnalysisLogs'
