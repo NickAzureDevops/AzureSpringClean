@@ -28,14 +28,3 @@ for assignment in $(find ${ASSIGNMENTS_DIR} -type f -name 'assign.*.json'); do
   echo "Deploying assignment: ${assignment}"
   az policy assignment create --name $assignment_name --policy "${policy_definition_id}" --scope "/subscriptions/$SUB" --display-name "$assignment_name"
 done
-
-echo "Triggering Policy Compliance Evaluation"
-# Get all resource groups in the subscription
-resourceGroups=$(az group list --subscription $SUB --query "[].name" -o tsv)
-
-# Trigger policy compliance evaluation for each resource group
-for rg in $resourceGroups; do
-    az policy state trigger-scan --resource-group $rg
-done
-
-echo "Policy Compliance Evaluation Triggered for all Resource Groups"
