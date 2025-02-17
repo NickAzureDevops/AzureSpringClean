@@ -35,7 +35,4 @@ stages:
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
         inlineScript: |
-          resourceGroups=$(az group list --subscription $(subscriptionId) --query "[].name" -o tsv)
-          for rg in $resourceGroups; do
-            az policy state trigger-scan --resource-group $rg &
-          done
+          az policy state trigger-scan
