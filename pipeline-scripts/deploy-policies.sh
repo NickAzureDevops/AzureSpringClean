@@ -29,4 +29,4 @@ for assignment in $(find ${ASSIGNMENTS_DIR} -type f -name 'assign.*.json'); do
 done
 
 echo "Triggering Compliance Scan"
-az policy state trigger-scan --resource "/subscriptions/$SUB"
+# az policy state trigger-scan --resource "/subscriptions/$SUB"
