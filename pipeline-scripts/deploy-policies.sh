@@ -24,7 +24,7 @@ echo "Deploying Subscription Assignments"
 for assignment in $(find ${ASSIGNMENTS_DIR} -type f -name 'assign.*.json'); do
   assignment_name=$(basename "${assignment}" .json)
   policy_definition_id=$(jq -r '.properties.policyDefinitionId' "${assignment}")
-  echo "Creating policy assignment: $assignment_name"
+  echo "Deploying assignment: ${assignment}"
   az policy assignment create --name $assignment_name --policy "${policy_definition_id}" --scope "/subscriptions/$SUB" --display-name "$assignment_name"
 done
 
