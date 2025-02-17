@@ -39,7 +39,6 @@ stages:
 
 - stage: ApplyAzurePolicySubscription
   displayName: 'Apply Azure Policy to Subscription'
-  condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
   jobs:
   - job: Deploy
     displayName: 'Deploy Policy Definitions and Assignments'

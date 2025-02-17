@@ -26,3 +26,6 @@ for assignment in $(find ${ASSIGNMENTS_DIR} -type f -name 'assign.*.json'); do
   echo "Deploying assignment: ${assignment}"
   az policy assignment create --name $assignment_name --policy "${policy_definition_id}" --scope "/subscriptions/$SUB" --display-name "$assignment_name"
 done
+
+echo "Triggering Compliance Scan"
+az policy state trigger-scan --resource "/subscriptions/$SUB"
