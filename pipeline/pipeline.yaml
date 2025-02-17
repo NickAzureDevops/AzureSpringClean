@@ -37,12 +37,15 @@ stages:
         inlineScript: |
           az policy state trigger-scan
 
-    - task: MicrosoftSecurityDevOps@1
-      displayName: 'Microsoft Security DevOps'
-      inputs:
-        policy: 'azuredevops'
-        categories: 'IaC'
-        tools: 'checkov, terrascan'
-        break: true
-        publish: true
-        artifactName: 'CodeAnalysisLogs'
+- stage: DeployPolicies
+  displayName: 'Deploy Azure Policies'
+  jobs:
+  - task: MicrosoftSecurityDevOps@1
+    displayName: 'Microsoft Security DevOps'
+    inputs:
+      policy: 'azuredevops'
+      categories: 'IaC'
+      tools: 'checkov, terrascan'
+      break: true
+      publish: true
+      artifactName: 'CodeAnalysisLogs'
