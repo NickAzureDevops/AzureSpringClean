@@ -39,4 +39,3 @@ stages:
           for rg in $resourceGroups; do
             az policy state trigger-scan --resource-group $rg &
           done
-          wait
