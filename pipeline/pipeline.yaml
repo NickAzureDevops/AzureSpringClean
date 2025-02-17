@@ -35,30 +35,7 @@ stages:
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
         inlineScript: |
-          az policy state trigger-scan --resource '/subscriptions/$(subscriptionId)'
-
-- stage: ApplyAzurePolicySubscription
-  displayName: 'Apply Azure Policy to Subscription'
-  jobs:
-  - job: Deploy
-    displayName: 'Deploy Policy Definitions and Assignments'
-    steps:
-    - checkout: self
-
-    - task: AzureCLI@2
-      displayName: 'Deploy Policy Definitions and Assignments'
-      inputs:
-        azureSubscription: '$(serviceConnection)'
-        scriptType: 'bash'
-        scriptLocation: 'scriptPath'
-        scriptPath: 'pipeline-scripts/deploy-policies.sh'
-        arguments: '$(subscriptionId) $(policiesDirectory) $(assignmentsDirectory)/$(subscriptionId)'
-
-    - task: AzureCLI@2
-      displayName: 'Trigger Compliance Scan'
-      inputs:
-        azureSubscription: '$(serviceConnection)'
-        scriptType: 'bash'
-        scriptLocation: 'inlineScript'
-        inlineScript: |
-          az policy state trigger-scan --resource '/subscriptions/$(subscriptionId)'
+          resourceGroups=$(az group list --subscription $(subscriptionId) --query "[].name" -o tsv)
+          for rg in $resourceGroups; do
+            az policy state trigger-scan --resource-group $rg
+          done
