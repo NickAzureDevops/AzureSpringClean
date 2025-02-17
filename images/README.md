@@ -1,7 +1,3 @@
-This repon contain the Azure Policy definitions and assignments used for Azure Spring Clean 2025
-
-![Azure Spring Clean](/images/Enforcing%20Compliance%20with%20Azure%20Policy%20in%20Azure%20Pipelines.drawio-2.png)
-
 📖 Overview
 
 This repo contains a high-level diagram of the setup we’ll be using during the Azure Spring Clean demo. The setup helps prevent non-compliant resources from being deployed using Azure Policy and Azure Pipelines. 
