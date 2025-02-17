@@ -60,10 +60,6 @@
               {
                 "field": "tags['environment']",
                 "notIn": "[parameters('allowedEnvironmentNames')]"
-              },
-              {
-                "field": "tags['businessArea']",
-                "notIn": "[parameters('allowedBusinessAreaNames')]"
               }
             ]
           }
