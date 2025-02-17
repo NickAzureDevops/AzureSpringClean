@@ -1,4 +1,4 @@
-#!/bin/bash
+!/bin/bash
 set -ex
 
 export SUB="$1"
@@ -9,10 +9,11 @@ echo "Deploying Policies"
 for policy in $(find ${POLICIES_DIR} -name '*.json' -type f); do
   policy_name=$(basename "${policy}" .json)
   echo "Validating policy: ${policy}"
-  if jq -e '.properties' "${policy}" >/dev/null; then
-    az policy definition create --name $policy_name --rules "${policy}" --mode All --display-name "${policy_name}" --description "Policy from ${policy}"
+  if jq -e '.properties.policyRule' "${policy}" >/dev/null; then
+    policy_rule=$(jq -c '.properties.policyRule' "${policy}")
+    az policy definition create --name $policy_name --rules "${policy_rule}" --mode All --display-name "${policy_name}" --description "Policy from ${policy}"
   else
-    echo "Error: Policy file ${policy} does not have a valid 'properties' field."
+    echo "Error: Policy file ${policy} does not have a valid 'policyRule' field."
     exit 1
   fi
 done
