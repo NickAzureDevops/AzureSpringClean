@@ -11,34 +11,28 @@ pool:
   vmImage: 'ubuntu-latest'
 
 stages:
-  - stage: DeployPolicies
-    displayName: 'Deploy Azure Policies'
-    jobs:
-      - job: Deploy
-        displayName: 'Deploy Policy Definitions and Assignments'
-        steps:
-          - checkout: self
+- stage: DeployPolicies
+  displayName: 'Deploy Azure Policies'
+  jobs:
+  - job: Deploy
+    displayName: 'Deploy Policy Definitions and Assignments'
+    steps:
+    - checkout: self
 
-          - task: AzureCLI@2
-            displayName: 'Deploy Policy Definitions'
-            inputs:
-              azureSubscription: $(serviceConnection)
-              scriptType: bash
-              scriptLocation: inlineScript
-              inlineScript: |
-                for policy in $(find $(policiesDirectory) -name policy.json); do
-                  echo "Deploying policy: $policy"
-                  az policy definition create --name $(basename $(dirname $policy)) --policy @$policy --mode All
-                done
+    - task: AzureCLI@2
+      displayName: 'Deploy Policy Definitions and Assignments'
+      inputs:
+        azureSubscription: '$(serviceConnection)'
+        scriptType: 'bash'
+        scriptLocation: 'scriptPath'
+        scriptPath: 'pipeline-scripts/deploy-policies.sh'
+        arguments: '$(subscriptionId) $(policiesDirectory) $(assignmentsDirectory)/$(subscriptionId)'
 
-          - task: AzureCLI@2
-            displayName: 'Deploy Policy Assignments'
-            inputs:
-              azureSubscription: $(serviceConnection)
-              scriptType: bash
-              scriptLocation: inlineScript
-              inlineScript: |
-                for assignment in $(find $(assignmentsDirectory) -name 'assign.*.json'); do
-                  echo "Deploying assignment: $assignment"
-                  az policy assignment create --name $(basename $assignment .json) --policy @$assignment --scope /subscriptions/$(subscriptionId)
-                done
+    - task: AzureCLI@2
+      displayName: 'Trigger Compliance Scan'
+      inputs:
+        azureSubscription: '$(serviceConnection)'
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az policy state trigger-scan --resource '/subscriptions/$(subscriptionId)'
