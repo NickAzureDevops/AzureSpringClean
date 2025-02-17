@@ -28,14 +28,14 @@ stages:
         scriptPath: 'pipeline-scripts/deploy-policies.sh'
         arguments: '$(subscriptionId) $(policiesDirectory) $(assignmentsDirectory)/$(subscriptionId)'
 
-    - task: AzureCLI@2
-      displayName: 'Trigger Compliance Scan'
-      inputs:
-        azureSubscription: '$(serviceConnection)'
-        scriptType: 'bash'
-        scriptLocation: 'inlineScript'
-        inlineScript: |
-          az policy state trigger-scan --resource '/subscriptions/$(subscriptionId)'
+    # - task: AzureCLI@2
+    #   displayName: 'Trigger Compliance Scan'
+    #   inputs:
+    #     azureSubscription: '$(serviceConnection)'
+    #     scriptType: 'bash'
+    #     scriptLocation: 'inlineScript'
+    #     inlineScript: |
+    #       az policy state trigger-scan --resource '/subscriptions/$(subscriptionId)'
 
 - stage: ApplyAzurePolicySubscription
   displayName: 'Apply Azure Policy to Subscription'
@@ -54,11 +54,11 @@ stages:
         scriptPath: 'pipeline-scripts/deploy-policies.sh'
         arguments: '$(subscriptionId) $(policiesDirectory) $(assignmentsDirectory)/$(subscriptionId)'
 
-    - task: AzureCLI@2
-      displayName: 'Trigger Compliance Scan'
-      inputs:
-        azureSubscription: '$(serviceConnection)'
-        scriptType: 'bash'
-        scriptLocation: 'inlineScript'
-        inlineScript: |
-          az policy state trigger-scan --resource '/subscriptions/$(subscriptionId)'
+    # - task: AzureCLI@2
+    #   displayName: 'Trigger Compliance Scan'
+    #   inputs:
+    #     azureSubscription: '$(serviceConnection)'
+    #     scriptType: 'bash'
+    #     scriptLocation: 'inlineScript'
+    #     inlineScript: |
+    #       az policy state trigger-scan --resource '/subscriptions/$(subscriptionId)'
