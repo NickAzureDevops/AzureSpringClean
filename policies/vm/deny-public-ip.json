@@ -3,14 +3,6 @@
     "displayName": "Deny Public IP",
     "policyType": "Custom",
     "mode": "All",
-    "description": "This policy denies the creation of public IP addresses.",
-    "metadata": {
-      "category": "Network",
-      "createdBy": "https://github.com/azure-policy",
-      "updatedBy": "https://github.com/azure-policy",
-      "createdOn": "2023-10-01T00:00:00Z",
-      "updatedOn": "2023-10-01T00:00:00Z"
-    },
     "parameters": {},
     "policyRule": {
       "if": {
@@ -24,6 +16,9 @@
       "then": {
         "effect": "deny"
       }
+    },
+    "metadata": {
+      "category": "Network"
     }
   }
 }
