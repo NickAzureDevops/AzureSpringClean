@@ -63,7 +63,7 @@ stages:
             languages: 'csharp'
             enableAutomaticCodeQLInstall: true
 
-        - task: AdvancedSecurity-Secret-Scanning@1
+        - task: GitHubAdvancedSecurity-SecretScanning@1
           displayName: 'Secret Scanning'
           inputs:
             scanType: 'all'
