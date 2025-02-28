@@ -52,18 +52,12 @@ stages:
           displayName: 'Change to src directory'
 
         - task: AdvancedSecurity-Codeql-Init@1
-          displayName: Initialize CodeQL
-          inputs:
-            languages: 'csharp' 
-            buildtype: 'none'
-
-        - task: AdvancedSecurity-Codeql-Analyze@1
-          displayName: Perform CodeQL Analysis
           inputs:
             languages: 'csharp'
-            enableAutomaticCodeQLInstall: true
+        - task: AdvancedSecurity-Codeql-Autobuild@1
 
-        - task: AdvancedSecurity-Secret-Scanning@1
-          displayName: 'Secret Scanning'
+        - task: AdvancedSecurity-Dependency-Scanning@1
           inputs:
-            scanType: 'all'
+            autoFix: false
+
+        - task: AdvancedSecurity-Codeql-Analyze@1
