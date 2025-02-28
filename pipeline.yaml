@@ -76,14 +76,6 @@ stages:
           inputs:
             command: 'build'
 
-        - task: NuGetCommand@2
-          displayName: 'Restore NuGet Packages'
-          inputs:
-            command: 'restore'
-            restoreSolution: '**/*.sln'
-            feedsToUse: 'select'
-            
-
         - task: AdvancedSecurity-Dependency-Scanning@1
           inputs:
             autoFix: true
