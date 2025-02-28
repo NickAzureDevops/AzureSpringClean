@@ -62,3 +62,8 @@ stages:
           inputs:
             languages: 'csharp'
             enableAutomaticCodeQLInstall: true
+
+        - task: AdvancedSecurity-Secret-Scanning@1
+          displayName: 'Secret Scanning'
+          inputs:
+            scanType: 'all'
