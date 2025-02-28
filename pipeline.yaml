@@ -52,8 +52,6 @@ stages:
           inputs:
             languages: 'csharp'
 
-        - task: AdvancedSecurity-Codeql-Autobuild@1
-
         - script: echo "Hello, world!"
           displayName: 'Print Hello, world!'
 
