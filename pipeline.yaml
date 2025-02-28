@@ -6,7 +6,6 @@ variables:
   assignmentsDirectory: "$(System.DefaultWorkingDirectory)/assignments/subscriptions/"
   serviceConnection: 'ServiceConnection'
   subscriptionId: '64681aa1-73cc-4155-aa97-caa0e4837412'
-  advancedsecurity.codeql.language: csharp
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -53,6 +52,11 @@ stages:
           displayName: 'Change to src directory'
 
         - task: AdvancedSecurity-Codeql-Init@1
+          displayName: 'Initialize CodeQL'
+          inputs:
+            languages: 'csharp'
+            buildtype: 'none'
+            enableAutomaticCodeQLInstall: true
 
         - task: NuGetCommand@2
           displayName: 'Restore NuGet Packages'
