@@ -77,8 +77,6 @@ stages:
             command: 'build'
 
         - task: AdvancedSecurity-Dependency-Scanning@1
-          inputs:
-            autoFix: true
 
         - task: AdvancedSecurity-Codeql-Analyze@1
 
