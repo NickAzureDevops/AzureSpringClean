@@ -48,7 +48,7 @@ stages:
       displayName: 'Microsoft Security DevOps'
       steps:
 
-        - script: ls
+        - script: cd src
           displayName: 'Change to src directory'
 
         - task: AdvancedSecurity-Codeql-Init@1
