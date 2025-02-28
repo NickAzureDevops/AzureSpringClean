@@ -47,19 +47,9 @@ stages:
     - job: DeploySecurity
       displayName: 'Microsoft Security DevOps'
       steps:
-        - checkout: self
 
         - script: cd src
           displayName: 'Change to src directory'
-
-        - task: UseDotNet@2
-          displayName: 'Install .NET SDK'
-          inputs:
-            packageType: 'sdk'
-            version: '6.x' # Specify the .NET SDK version you need
-
-        - script: dotnet build --configuration Release
-          displayName: 'Build .NET Project'
 
         - task: AdvancedSecurity-Codeql-Init@1
           displayName: 'Initialize CodeQL'
@@ -68,19 +58,8 @@ stages:
             buildtype: 'none'
             enableAutomaticCodeQLInstall: true
 
-        - task: AdvancedSecurity-Codeql-Analyze@1
-          displayName: 'Perform CodeQL Analysis'
-          inputs:
-            languages: 'csharp'
-            enableAutomaticCodeQLInstall: true
-
         - task: AdvancedSecurity-Dependency-Scanning@1
-          displayName: 'Dependency Scanning'
-          inputs:
-            scanType: 'nuget'
-            autoFix: true
-
-        - task: GitHubAdvancedSecurity-SecretScanning@1
-          displayName: 'Secret Scanning'
-          inputs:
-            scanType: 'all'
+        
+        - task: AdvancedSecurity-Codeql-Analyze@1
+        
+        - task: AdvancedSecurity-Publish@1
