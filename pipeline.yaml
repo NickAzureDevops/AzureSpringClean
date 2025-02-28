@@ -63,7 +63,6 @@ stages:
           displayName: 'Dependency Scanning'
           inputs:
             scanType: 'nuget'
-            autoFix: true
 
         - task: AdvancedSecurity-Codeql-Analyze@1
           displayName: 'Perform CodeQL Analysis'
