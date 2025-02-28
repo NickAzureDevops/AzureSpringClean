@@ -54,6 +54,7 @@ stages:
         - task: AdvancedSecurity-Codeql-Init@1
           inputs:
             languages: 'csharp'
+            
         - task: AdvancedSecurity-Codeql-Autobuild@1
 
         - script: echo "Hello, world!"
