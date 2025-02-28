@@ -59,7 +59,7 @@ stages:
             enableAutomaticCodeQLInstall: true
 
         - task: AdvancedSecurity-Dependency-Scanning@1
-          inputs:
-            autoFix: true
-
+        
         - task: AdvancedSecurity-Codeql-Analyze@1
+        
+        - task: AdvancedSecurity-Publish@1
