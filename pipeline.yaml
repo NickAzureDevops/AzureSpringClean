@@ -70,8 +70,6 @@ stages:
           displayName: 'Build .NET Project'
           inputs:
             command: 'build'
-            projects: '**/*.sln'
-            arguments: '--configuration Release'
 
         - task: NuGetCommand@2
           displayName: 'Restore NuGet Packages'
