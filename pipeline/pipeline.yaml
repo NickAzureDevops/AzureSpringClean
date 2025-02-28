@@ -4,7 +4,7 @@ trigger:
 variables:
   policiesDirectory: "$(System.DefaultWorkingDirectory)/policies/"
   assignmentsDirectory: "$(System.DefaultWorkingDirectory)/assignments/subscriptions/"
-  serviceConnection: 'SP'
+  serviceConnection: 'ServiceConnection'
   subscriptionId: '64681aa1-73cc-4155-aa97-caa0e4837412'
 
 pool:
@@ -47,29 +47,14 @@ stages:
     - job: DeploySecurity
       displayName: 'Microsoft Security DevOps'
       steps:
-        - task: MicrosoftSecurityDevOps@1
-          displayName: 'Microsoft Security DevOps'
-          inputs:
-            policy: 'azuredevops'
-            categories: 'IaC'
-            tools: 'checkov, terrascan'
-            break: true
-            publish: true
-            artifactName: 'CodeAnalysisLogs'
-
         - task: AdvancedSecurity-Codeql-Init@1
+          displayName: Initialize CodeQL
           inputs:
-            languages: "java"
-            enableAutomaticCodeQLInstall: true
-
-
-        - task: AdvancedSecurity-Dependency-Scanning@1
-          displayName: 'Dependency Scanning'
-          inputs:
-            scanType: 'npm' # Adjust this based on your project type
+            languages: 'csharp' 
+            buildtype: 'none'
 
         - task: AdvancedSecurity-Codeql-Analyze@1
-          displayName: 'Analyze Code with CodeQL'
+          displayName: Perform CodeQL Analysis
           inputs:
-            languages: "java"
+            languages: 'csharp'
             enableAutomaticCodeQLInstall: true
