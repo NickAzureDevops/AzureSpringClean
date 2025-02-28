@@ -58,9 +58,6 @@ stages:
             buildtype: 'none'
             enableAutomaticCodeQLInstall: true
 
-        - task: AdvancedSecurity-Codeql-Autobuild@1
-          displayName: 'Autobuild CodeQL Database'
-
         - task: AdvancedSecurity-Dependency-Scanning@1
           inputs:
             autoFix: true
