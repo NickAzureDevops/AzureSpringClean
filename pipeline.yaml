@@ -79,10 +79,5 @@ stages:
             scanType: 'nuget'
             autoFix: true
 
-        - task: AdvancedSecurity-Secret-Scanning@1
-          displayName: 'Secret Scanning'
-          inputs:
-            scanType: 'all'
-
         - task: AdvancedSecurity-Publish@1
           displayName: 'Publish Security Results'
