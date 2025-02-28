@@ -52,8 +52,6 @@ stages:
           displayName: 'Change to src directory'
 
         - task: AdvancedSecurity-Codeql-Init@1
-          inputs:
-            languages: 'csharp'
 
         - task: UseDotNet@2
           displayName: 'Install .NET SDK'
