@@ -52,14 +52,15 @@ stages:
           displayName: 'Change to src directory'
 
         - task: AdvancedSecurity-Codeql-Init@1
-          displayName: 'Initialize CodeQL'
           inputs:
             languages: 'csharp'
-            buildtype: 'none'
-            enableAutomaticCodeQLInstall: true
+        - task: AdvancedSecurity-Codeql-Autobuild@1
+
+        - script: echo "Hello, world!"
+          displayName: 'Print Hello, world!'
 
         - task: AdvancedSecurity-Dependency-Scanning@1
-        
+          inputs:
+            autoFix: true
+
         - task: AdvancedSecurity-Codeql-Analyze@1
-        
-        - task: AdvancedSecurity-Publish@1
