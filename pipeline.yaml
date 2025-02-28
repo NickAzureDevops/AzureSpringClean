@@ -52,6 +52,25 @@ stages:
         - script: cd src
           displayName: 'Change to src directory'
 
+        - task: UseDotNet@2
+          displayName: 'Install .NET SDK'
+          inputs:
+            packageType: 'sdk'
+            version: '6.x' # Specify the .NET SDK version you need
+
+        - task: DotNetCoreCLI@2
+          displayName: 'Restore NuGet Packages'
+          inputs:
+            command: 'restore'
+            projects: '**/*.sln'
+
+        - task: DotNetCoreCLI@2
+          displayName: 'Build .NET Project'
+          inputs:
+            command: 'build'
+            projects: '**/*.sln'
+            arguments: '--configuration Release'
+
         - task: AdvancedSecurity-Codeql-Init@1
           displayName: 'Initialize CodeQL'
           inputs:
@@ -59,16 +78,25 @@ stages:
             buildtype: 'none'
             enableAutomaticCodeQLInstall: true
 
+        - task: AdvancedSecurity-Codeql-Autobuild@1
+          displayName: 'Autobuild CodeQL Database'
+
         - task: AdvancedSecurity-Dependency-Scanning@1
           displayName: 'Dependency Scanning'
           inputs:
             scanType: 'nuget'
+            autoFix: true
 
         - task: AdvancedSecurity-Codeql-Analyze@1
           displayName: 'Perform CodeQL Analysis'
           inputs:
             languages: 'csharp'
             enableAutomaticCodeQLInstall: true
+
+        - task: AdvancedSecurity-Secret-Scanning@1
+          displayName: 'Secret Scanning'
+          inputs:
+            scanType: 'all'
 
         - task: AdvancedSecurity-Publish@1
           displayName: 'Publish Security Results'
