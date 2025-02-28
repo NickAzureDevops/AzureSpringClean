@@ -48,15 +48,41 @@ stages:
       displayName: 'Microsoft Security DevOps'
       steps:
 
+        - task: UseDotNet@2
+          displayName: 'Install .NET SDK'
+          inputs:
+            packageType: 'sdk'
+            version: '6.x' # Specify the .NET SDK version you need
+
+        - script: dotnet restore
+          displayName: 'Restore .NET Dependencies'
+
+        - script: dotnet build --configuration Release
+          displayName: 'Build .NET Project'
+
         - task: AdvancedSecurity-Codeql-Init@1
+          displayName: 'Initialize CodeQL'
           inputs:
             languages: 'csharp'
-
-        - script: echo "Hello, world!"
-          displayName: 'Print Hello, world!'
-
-        - task: AdvancedSecurity-Dependency-Scanning@1
-          inputs:
-            autoFix: true
+            buildtype: 'none'
+            enableAutomaticCodeQLInstall: true
 
         - task: AdvancedSecurity-Codeql-Analyze@1
+          displayName: 'Perform CodeQL Analysis'
+          inputs:
+            languages: 'csharp'
+            enableAutomaticCodeQLInstall: true
+
+        - task: AdvancedSecurity-Dependency-Scanning@1
+          displayName: 'Dependency Scanning'
+          inputs:
+            scanType: 'nuget'
+            autoFix: true
+
+        - task: AdvancedSecurity-Secret-Scanning@1
+          displayName: 'Secret Scanning'
+          inputs:
+            scanType: 'all'
+
+        - task: AdvancedSecurity-Publish@1
+          displayName: 'Publish Security Results'
