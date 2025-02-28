@@ -58,9 +58,6 @@ stages:
             packageType: 'sdk'
             version: '6.x' # Specify the .NET SDK version you need
 
-        - script: dotnet restore
-          displayName: 'Restore .NET Dependencies'
-
         - script: dotnet build --configuration Release
           displayName: 'Build .NET Project'
 
