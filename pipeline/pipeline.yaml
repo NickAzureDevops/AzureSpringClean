@@ -51,8 +51,8 @@ stages:
           displayName: 'Microsoft Security DevOps'
           inputs:
             policy: 'azuredevops'
-            categories: 'IaC'
-            tools: 'checkov, terrascan'
+            categories: 'code, IaC'
+            tools: 'eslint, checkov, terrascan'
             break: true
             publish: true
             artifactName: 'CodeAnalysisLogs'
