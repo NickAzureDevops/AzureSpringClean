@@ -53,26 +53,18 @@ stages:
           displayName: 'Change to src directory'
 
         - task: AdvancedSecurity-Codeql-Init@1
-          displayName: 'Initialize CodeQL'
           inputs:
-            languages: 'csharp'
-            buildtype: 'none'
-            enableAutomaticCodeQLInstall: true
+            languages: 'javascript'
 
-        - task: AdvancedSecurity-Codeql-Autobuild@1
-          displayName: 'Autobuild CodeQL Database'
+        - task: NodeTool@0
+          inputs:
+            versionSpec: '10.x'
+          displayName: 'Install Node.js'
+
+        - script: |
+            npm install
+          displayName: 'npm install and build'
 
         - task: AdvancedSecurity-Dependency-Scanning@1
-          displayName: 'Dependency Scanning'
-          inputs:
-            scanType: 'nuget'
-            autoFix: true
 
         - task: AdvancedSecurity-Codeql-Analyze@1
-          displayName: 'Perform CodeQL Analysis'
-          inputs:
-            languages: 'csharp'
-            enableAutomaticCodeQLInstall: true
-
-        - task: AdvancedSecurity-Publish@1
-          displayName: 'Publish Security Results'
