@@ -66,10 +66,10 @@ stages:
             enableAutomaticCodeQLInstall: true
 
         - task: DotNetCoreCLI@2
-          displayName: 'Restore NuGet Packages'
           inputs:
-            command: 'restore'
-            projects: '**/*.sln'
+            command: 'custom'
+            custom: 'build'
+            arguments: '--no-restore'
 
         - task: DotNetCoreCLI@2
           displayName: 'Build .NET Project'
