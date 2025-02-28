@@ -48,13 +48,10 @@ stages:
       displayName: 'Microsoft Security DevOps'
       steps:
 
-        - script: cd src
-          displayName: 'Change to src directory'
-
         - task: AdvancedSecurity-Codeql-Init@1
           inputs:
             languages: 'csharp'
-            
+
         - task: AdvancedSecurity-Codeql-Autobuild@1
 
         - script: echo "Hello, world!"
