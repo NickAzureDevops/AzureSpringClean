@@ -93,10 +93,5 @@ stages:
             languages: 'csharp'
             enableAutomaticCodeQLInstall: true
 
-        - task: AdvancedSecurity-Secret-Scanning@1
-          displayName: 'Secret Scanning'
-          inputs:
-            scanType: 'all'
-
         - task: AdvancedSecurity-Publish@1
           displayName: 'Publish Security Results'
