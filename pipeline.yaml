@@ -52,25 +52,6 @@ stages:
         - script: cd src
           displayName: 'Change to src directory'
 
-        - task: UseDotNet@2
-          displayName: 'Install .NET SDK'
-          inputs:
-            packageType: 'sdk'
-            version: '6.x' # Specify the .NET SDK version you need
-
-        - task: DotNetCoreCLI@2
-          displayName: 'Restore NuGet Packages'
-          inputs:
-            command: 'restore'
-            projects: '**/*.sln'
-
-        - task: DotNetCoreCLI@2
-          displayName: 'Build .NET Project'
-          inputs:
-            command: 'build'
-            projects: '**/*.sln'
-            arguments: '--configuration Release'
-
         - task: AdvancedSecurity-Codeql-Init@1
           displayName: 'Initialize CodeQL'
           inputs:
