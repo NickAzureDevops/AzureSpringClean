@@ -64,17 +64,25 @@ stages:
             buildtype: 'none'
             enableAutomaticCodeQLInstall: true
 
-        - task: NuGetCommand@2
+        - task: DotNetCoreCLI@2
           displayName: 'Restore NuGet Packages'
           inputs:
             command: 'restore'
-            restoreSolution: '**/*.sln'
-            feedsToUse: 'select'
+            projects: '**/*.sln'
 
         - task: DotNetCoreCLI@2
           displayName: 'Build .NET Project'
           inputs:
             command: 'build'
+            projects: '**/*.sln'
+            arguments: '--configuration Release'
+
+        - task: AdvancedSecurity-Codeql-Init@1
+          displayName: 'Initialize CodeQL'
+          inputs:
+            languages: 'csharp'
+            buildtype: 'none'
+            enableAutomaticCodeQLInstall: true
 
         - task: AdvancedSecurity-Dependency-Scanning@1
 
