@@ -47,6 +47,10 @@ stages:
     - job: DeploySecurity
       displayName: 'Microsoft Security DevOps'
       steps:
+
+        - script: ../cd src
+          displayName: 'Change to src directory'
+
         - task: AdvancedSecurity-Codeql-Init@1
           displayName: Initialize CodeQL
           inputs:
