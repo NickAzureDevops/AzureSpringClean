@@ -1,6 +1,6 @@
 This repon contain the Azure Policy definitions and assignments used for Azure Spring Clean 2025
 
-![Azure Spring Clean](/images/Enforcing%20Compliance%20with%20Azure%20Policy%20in%20Azure%20Pipelines.drawio-2.png)
+![Azure Spring Clean](/images/Enforcing%20Compliance%20with%20Azure%20Policy%20in%20Azure%20Pipelines.jpg)
 
 📖 Overview
 
