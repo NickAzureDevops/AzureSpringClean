@@ -40,7 +40,7 @@ deploy_assignment() {
   echo "Deploying assignment: ${assignment}"
   echo "Assignment name: $assignment_name"
   echo "Policy definition ID: $policy_definition_id"
-  az policy assignment create --name $assignment_name --policy "${policy_definition_id}" --scope "/subscriptions/$SUB" --display-name "$assignment_name" || {
+  az policy assignment create --name $assignment_name --policy "${policy_definition_id}" --scope "subscriptions/$SUB" --display-name "$assignment_name" || {
     echo "Error: Failed to create policy assignment: $assignment_name"
     exit 1
   }
