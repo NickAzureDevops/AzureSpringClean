@@ -21,6 +21,7 @@ const server = http.createServer((req, res) => {
 server.listen(3000, () => {
     console.log('Server running at http://localhost:3000/');
     console.log(`Using API Key: ${apiKey}`);
+    console.log(`Using API Key2: ${apiKey2}`);
 });
 
 
