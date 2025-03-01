@@ -3,7 +3,7 @@ trigger:
 
 variables:
   policiesDirectory: "$(System.DefaultWorkingDirectory)/policies/"
-  assignmentsDirectory: "$(System.DefaultWorkingDirectory)/assignments/subscriptions"
+  assignmentsDirectory: "$(System.DefaultWorkingDirectory)/assignments/subscriptions/"
   serviceConnection: 'ServiceConnection'
   subscriptionId: '14a92e37-f24d-48ee-a857-6e2dcbbadc09'
 
