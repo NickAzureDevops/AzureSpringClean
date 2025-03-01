@@ -16,10 +16,6 @@
     "policyDefinitionId": "/subscriptions/14a92e37-f24d-48ee-a857-6e2dcbbadc09/providers/Microsoft.Authorization/policyDefinitions/deny-public-ip",
     "scope": "/subscriptions/14a92e37-f24d-48ee-a857-6e2dcbbadc09"
   },
-  "location": "uksouth",
-  "identity": {
-      "type": "SystemAssigned"
-  },
   "sku": {
     "name": "A0",
     "tier": "Free"
