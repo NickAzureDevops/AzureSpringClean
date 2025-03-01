@@ -21,7 +21,8 @@ resource "azurerm_linux_virtual_machine" "linuxservers" {
   }
 
   tags = {
-    environment = "demo"
+    environment = "sandbox"  # Ensure this matches the allowed environment names
+    application = "azurespringclean"
   }
 }
 
@@ -46,8 +47,8 @@ resource "azurerm_public_ip" "linuxservers" {
   sku                 = "Standard"
 
   tags = {
-    environment = "demo"
-    application = "azurespringclean"  # Add any other required tags here
+    environment = "sandbox"  # Ensure this matches the allowed environment names
+    application = "azurespringclean"
   }
 }
 
