@@ -1,18 +1,25 @@
 {
   "properties": {
+    "description": "Policy to auto tag: application",
     "displayName": "Deny Public IP Assignment",
-    "scope": "/subscriptions/14a92e37-f24d-48ee-a857-6e2dcbbadc09",
-    "parameters": {},
-    "metadata": {
-      "assignedBy": "PlatOps"
-    },
-    "description": "Policy to deny the deployment of public IP addresses",
     "enforcementMode": "Default",
     "nonComplianceMessages": [],
-    "notScopes": []
+    "notScopes": [],
+    "parameters": {
+      "tagName": {
+        "value": "azurespringclean2025"
+      },
+      "tagValue": {
+        "value": "demo"
+      }
+    },
+    "policyDefinitionId": "/subscriptions/14a92e37-f24d-48ee-a857-6e2dcbbadc09/providers/Microsoft.Authorization/policyDefinitions/deny-public-ip",
+    "scope": "/subscriptions/14a92e37-f24d-48ee-a857-6e2dcbbadc09"
   },
-  "policyDefinitionId": "/subscriptions/14a92e37-f24d-48ee-a857-6e2dcbbadc09/providers/Microsoft.Authorization/policyDefinitions/deny-public-ip",
   "location": "uksouth",
+  "identity": {
+      "type": "SystemAssigned"
+  },
   "sku": {
     "name": "A0",
     "tier": "Free"
