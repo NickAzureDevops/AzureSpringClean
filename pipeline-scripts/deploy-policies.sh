@@ -29,8 +29,8 @@ deploy_policy() {
 # Function to deploy a single assignment
 deploy_assignment() {
   local assignment=$1
-  local assignment_name=$(basename "${assignment}" .json)
-  local policy_definition_id=$(jq -r '.properties.policyDefinitionId' "${assignment}")
+  local assignment_name="deny-public-ip"
+  local policy_definition_id="/subscriptions/14a92e37-f24d-48ee-a857-6e2dcbbadc09/providers/Microsoft.Authorization/policyDefinitions/deny-public-ip"
 
   echo "Deploying assignment: ${assignment}"
   echo "Assignment name: $assignment_name"
@@ -50,7 +50,7 @@ done
 # Deploy all assignments
 echo "Deploying Subscription Assignments"
 echo "ASSIGNMENTS_DIR: ${ASSIGNMENTS_DIR}"
-for assignment in $(find ${ASSIGNMENTS_DIR} -name '*.json' -type f); do
+for assignment in $(find ${ASSIGNMENTS_DIR} -name '*.json' -type f ); do
 echo "Hello"
   deploy_assignment "${assignment}"
 done
