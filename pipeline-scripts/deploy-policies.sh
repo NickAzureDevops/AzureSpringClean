@@ -29,7 +29,7 @@ deploy_policy() {
 # Function to deploy a single assignment
 deploy_assignment() {
   local assignment=$1
-  local assignment_name=$(basename "${policy}" .json)
+  local assignment_name=$(basename "${assignment}" .json)
   local policy_definition_id="/subscriptions/$SUB/providers/Microsoft.Authorization/policyDefinitions/${assignment_name}"
 
   echo "Deploying assignment: ${assignment}"
@@ -49,7 +49,7 @@ done
 
 # Deploy all assignments
 echo "Deploying Subscription Assignments"
-for assignment in $(find ${ASSIGNMENTS_DIR} -name '*.json' -type f ); do
+for assignment in $(find ${ASSIGNMENTS_DIR} -name '*.json' -type f); do
   deploy_assignment "${assignment}"
 done
 

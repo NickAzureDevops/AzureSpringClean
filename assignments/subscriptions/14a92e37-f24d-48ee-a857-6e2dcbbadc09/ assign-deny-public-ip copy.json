@@ -1,0 +1,26 @@
+{
+  "properties": {
+    "description": "Policy to auto tag: application",
+    "displayName": "Deny Public IP Assignment-test",
+    "enforcementMode": "Default",
+    "nonComplianceMessages": [],
+    "notScopes": [],
+    "parameters": {
+      "tagName": {
+        "value": "azurespringclean2025"
+      },
+      "tagValue": {
+        "value": "demo"
+      }
+    },
+    "policyDefinitionId": "/subscriptions/14a92e37-f24d-48ee-a857-6e2dcbbadc09/providers/Microsoft.Authorization/policyDefinitions/deny-public-ip",
+    "scope": "/subscriptions/14a92e37-f24d-48ee-a857-6e2dcbbadc09"
+  },
+  "sku": {
+    "name": "A0",
+    "tier": "Free"
+  },
+  "type": "Microsoft.Authorization/policyAssignments",
+  "id": "/subscriptions/14a92e37-f24d-48ee-a857-6e2dcbbadc09/providers/Microsoft.Authorization/policyAssignments/deny-public-ip-assignment",
+  "name": "deny-public-ip-assignment"
+}
