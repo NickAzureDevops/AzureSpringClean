@@ -61,6 +61,10 @@ resource "azurerm_public_ip" "linuxservers" {
 resource "azurerm_resource_group" "this" {
   name     = "AzureSpringClean2025"
   location = var.location
+
+  tags = {
+    environment = "sandbox"
+    application = "azurespringclean"
 }
 
 resource "azurerm_virtual_network" "vnet" {
