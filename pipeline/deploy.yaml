@@ -72,7 +72,7 @@ stages:
           command: 'plan'
           workingDirectory: "${{ variables.workingDirectory }}"
           environmentServiceNameAzureRM: "${{ variables.serviceConnection }}"
-          commandOptions: '-var "admin_password=$(vm-password)"'
+          commandOptions: '-var "admin_password=$(admin_password)"'
 
 - stage: deploy
   displayName: 'Deploy'
@@ -110,4 +110,41 @@ stages:
           command: 'apply'
           workingDirectory: "${{ variables.workingDirectory }}"
           environmentServiceNameAzureRM: '${{ variables.serviceConnection }}'
-          commandOptions: '-var "admin_password=$(vm-password)"'
+          commandOptions: '-var "admin_password=$(admin_password)"'
+
+- stage: destroy
+  displayName: 'Destroy'
+  dependsOn:
+  - validate
+  condition: eq('${{ parameters.destroy }}', 'true')
+  jobs:
+    - job: 'Destroy'
+      steps:
+      - checkout: self
+        clean: true
+
+      - task: TerraformInstaller@1
+        displayName: 'Install Terraform'
+        inputs:
+          terraformVersion: 'latest'
+
+      - task: TerraformTaskV4@4
+        displayName: 'terraform init'
+        inputs:
+          provider: 'azurerm'
+          command: 'init'
+          workingDirectory: '$(workingDirectory)'
+          backendServiceArm: '$(serviceConnection)'
+          backendAzureRmResourceGroupName: '$(backendAzureRmResourceGroupName)'
+          backendAzureRmStorageAccountName: '$(backendAzureRmStorageAccountName)'
+          backendAzureRmContainerName: '$(backendAzureRmContainerName)'
+          backendAzureRmKey: '$(backendAzureRmKey)'
+
+      - task: TerraformTaskV4@4
+        displayName: 'terraform destroy'
+        condition: eq('${{ parameters.destroy }}', 'true')
+        inputs:
+          provider: 'azurerm'
+          command: 'destroy'
+          workingDirectory: "${{ variables.workingDirectory }}"
+          environmentServiceNameAzureRM: '${{ variables.serviceConnection }}'
