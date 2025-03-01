@@ -1,7 +1,3 @@
-provider "azurerm" {
-  features {}
-}
-
 module "vm" {
   source  = "Azure/compute/azurerm"
   version = "3.0.0"  # Use the latest version available
