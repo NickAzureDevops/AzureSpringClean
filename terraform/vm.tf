@@ -1,9 +1,13 @@
-module "linuxservers" {
-  source              = "Azure/compute/azurerm"
-  version             = "3.0.0"  # Use the latest version available
-  resource_group_name = azurerm_resource_group.this.name
+provider "azurerm" {
+  features {}
+}
 
-  # VM Configuration
+module "linuxservers" {
+  source              = "Azure/terraform-azurerm-avm-res-compute-virtualmachine"
+  version             = "1.0.0"  
+  resource_group_name = azurerm_resource_group.this.name
+  location            = var.location
+
   vm_os_simple        = "UbuntuServer"
   admin_username      = var.adminuser
   admin_password      = var.admin_password
@@ -11,7 +15,6 @@ module "linuxservers" {
   public_ip_dns       = ["linsimplevmips"]
   vnet_subnet_id      = azurerm_subnet.subnet.id
 
-  # Tags
   tags = {
     environment = "demo"
   }
