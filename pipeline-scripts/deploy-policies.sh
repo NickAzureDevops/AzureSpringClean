@@ -30,7 +30,7 @@ deploy_policy() {
 deploy_assignment() {
   local assignment=$1
   local assignment_name=$(basename "${assignment}" .json)
-  local policy_definition_id="/subscriptions/$SUB/providers/Microsoft.Authorization/policyDefinitions/${assignment_name}"
+  local policy_definition_id=$(jq -r '.properties.policyDefinitionId' "${assignment}")
 
   echo "Deploying assignment: ${assignment}"
   echo "Assignment name: $assignment_name"
