@@ -1,23 +1,48 @@
-provider "azurerm" {
-  features {}
-}
-
-module "linuxservers" {
-  source              = "Azure/terraform-azurerm-avm-res-compute-virtualmachine"
-  version             = "1.0.0"  
+resource "azurerm_linux_virtual_machine" "linuxservers" {
+  name                = "linuxservers"
   resource_group_name = azurerm_resource_group.this.name
   location            = var.location
-
-  vm_os_simple        = "UbuntuServer"
+  size                = "Standard_B1s"
   admin_username      = var.adminuser
   admin_password      = var.admin_password
-  vm_size             = "Standard_B1s"
-  public_ip_dns       = ["linsimplevmips"]
-  vnet_subnet_id      = azurerm_subnet.subnet.id
+  network_interface_ids = [azurerm_network_interface.linuxservers.id]
+  zone                = "1"
+
+  os_disk {
+    caching              = "ReadWrite"
+    storage_account_type = "Standard_LRS"
+  }
+
+  source_image_reference {
+    publisher = "Canonical"
+    offer     = "UbuntuServer"
+    sku       = "18.04-LTS"
+    version   = "latest"
+  }
 
   tags = {
     environment = "demo"
   }
+}
+
+resource "azurerm_network_interface" "linuxservers" {
+  name                = "linuxservers-nic"
+  location            = var.location
+  resource_group_name = azurerm_resource_group.this.name
+
+  ip_configuration {
+    name                          = "internal"
+    subnet_id                     = azurerm_subnet.subnet.id
+    private_ip_address_allocation = "Dynamic"
+    public_ip_address_id          = azurerm_public_ip.linuxservers.id
+  }
+}
+
+resource "azurerm_public_ip" "linuxservers" {
+  name                = "linuxservers-pip"
+  location            = var.location
+  resource_group_name = azurerm_resource_group.this.name
+  allocation_method   = "Dynamic"
 }
 
 resource "azurerm_resource_group" "this" {
