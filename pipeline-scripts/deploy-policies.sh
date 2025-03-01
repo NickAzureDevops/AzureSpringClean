@@ -30,7 +30,12 @@ deploy_policy() {
 deploy_assignment() {
   local assignment=$1
   local assignment_name=$(basename "${assignment}" .json)
-  local policy_definition_id="/subscriptions/$SUB/providers/Microsoft.Authorization/policyDefinitions/${assignment_name}"
+  local policy_definition_id=$(jq -r '.properties.policyDefinitionId' "${assignment}")
+
+  if [ -z "$policy_definition_id" ]; then
+    echo "Error: policyDefinitionId is empty for assignment: ${assignment}"
+    exit 1
+  fi
 
   echo "Deploying assignment: ${assignment}"
   echo "Assignment name: $assignment_name"
@@ -49,7 +54,7 @@ done
 
 # Deploy all assignments
 echo "Deploying Subscription Assignments"
-for assignment in $(find ${ASSIGNMENTS_DIR} -name '*.json' -type f ); do
+for assignment in $(find ${ASSIGNMENTS_DIR} -name '*.json' -type f); do
   deploy_assignment "${assignment}"
 done
 
