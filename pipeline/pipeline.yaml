@@ -5,7 +5,7 @@ variables:
   policiesDirectory: "$(System.DefaultWorkingDirectory)/policies/"
   assignmentsDirectory: "$(System.DefaultWorkingDirectory)/assignments/subscriptions/"
   serviceConnection: 'ServiceConnection'
-  subscriptionId: '64681aa1-73cc-4155-aa97-caa0e4837412'
+  subscriptionId: '14a92e37-f24d-48ee-a857-6e2dcbbadc09'
 
 pool:
   vmImage: 'ubuntu-latest'
