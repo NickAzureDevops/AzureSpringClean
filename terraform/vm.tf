@@ -43,6 +43,12 @@ resource "azurerm_public_ip" "linuxservers" {
   location            = var.location
   resource_group_name = azurerm_resource_group.this.name
   allocation_method   = "Static"
+  sku                 = "Standard"
+
+  tags = {
+    environment = "demo"
+    application = "azurespringclean" 
+  }
 }
 
 resource "azurerm_resource_group" "this" {
