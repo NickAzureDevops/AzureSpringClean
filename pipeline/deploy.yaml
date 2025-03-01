@@ -16,7 +16,7 @@ parameters:
 
 variables: 
   - name: workingDirectory
-    value: "$(System.DefaultWorkingDirectory)/terraform/"
+    value: "$(System.DefaultWorkingDirectory)
   - name: backendAzureRmKey
     value: 'azure-spring-clean-2025.tfstate'
   - name: backendAzureRmResourceGroupName
