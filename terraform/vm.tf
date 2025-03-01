@@ -4,9 +4,9 @@ resource "azurerm_linux_virtual_machine" "linuxservers" {
   location            = var.location
   size                = "Standard_B1s"
   admin_username      = var.adminuser
-  admin_password      = var.admin_password
   network_interface_ids = [azurerm_network_interface.linuxservers.id]
   zone                = "1"
+  disable_password_authentication = false
 
   os_disk {
     caching              = "ReadWrite"
