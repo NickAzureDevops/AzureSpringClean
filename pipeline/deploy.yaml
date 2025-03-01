@@ -148,3 +148,4 @@ stages:
           command: 'destroy'
           workingDirectory: "${{ variables.workingDirectory }}"
           environmentServiceNameAzureRM: '${{ variables.serviceConnection }}'
+          commandOptions: '-var "admin_password=$(admin_password)"'
