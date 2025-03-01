@@ -50,6 +50,7 @@ done
 # Deploy all assignments
 echo "Deploying Subscription Assignments"
 for assignment in $(find ${ASSIGNMENTS_DIR} -type f -name 'assign.*.json'); do
+echo "Hello"
   deploy_assignment "${assignment}"
 done
 
