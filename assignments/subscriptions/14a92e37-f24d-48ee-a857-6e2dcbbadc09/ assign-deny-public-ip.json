@@ -1,7 +1,7 @@
 {
   "properties": {
     "displayName": "Deny Public IP Assignment",
-    "scope": "/subscriptions/64681aa1-73cc-4155-aa97-caa0e4837412",
+    "scope": "/subscriptions/14a92e37-f24d-48ee-a857-6e2dcbbadc09",
     "parameters": {},
     "metadata": {
       "assignedBy": "PlatOps"
@@ -11,13 +11,13 @@
     "nonComplianceMessages": [],
     "notScopes": []
   },
-  "policyDefinitionId": "/subscriptions/64681aa1-73cc-4155-aa97-caa0e4837412/providers/Microsoft.Authorization/policyDefinitions/deny-public-ip",
+  "policyDefinitionId": "/subscriptions/14a92e37-f24d-48ee-a857-6e2dcbbadc09/providers/Microsoft.Authorization/policyDefinitions/deny-public-ip",
   "location": "uksouth",
   "sku": {
     "name": "A0",
     "tier": "Free"
   },
   "type": "Microsoft.Authorization/policyAssignments",
-  "id": "/subscriptions/64681aa1-73cc-4155-aa97-caa0e4837412/providers/Microsoft.Authorization/policyAssignments/deny-public-ip-assignment",
+  "id": "/subscriptions/14a92e37-f24d-48ee-a857-6e2dcbbadc09/providers/Microsoft.Authorization/policyAssignments/deny-public-ip-assignment",
   "name": "deny-public-ip-assignment"
 }
