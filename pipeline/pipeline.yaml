@@ -68,3 +68,7 @@ stages:
         - task: AdvancedSecurity-Dependency-Scanning@1
 
         - task: AdvancedSecurity-Codeql-Analyze@1
+
+        - task: MicrosoftSecurityDevOps@1
+          displayName: 'Microsoft Security DevOps'
+          
