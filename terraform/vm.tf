@@ -66,6 +66,7 @@ resource "azurerm_resource_group" "this" {
     environment = "sandbox"
     application = "azurespringclean"
 }
+}
 
 resource "azurerm_virtual_network" "vnet" {
   name                = "vnet"
