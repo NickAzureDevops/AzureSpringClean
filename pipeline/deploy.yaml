@@ -22,11 +22,11 @@ variables:
   - name: backendAzureRmResourceGroupName
     value: 'terraform-tfstate-rg'
   - name: backendAzureRmStorageAccountName
-    value: 'terraformstatesbox'
+    value: 'terraformstate122024'
   - name: backendAzureRmContainerName
     value: 'tfstate'
   - name: serviceConnection 
-    value: 'SP'
+    value: 'ServiceConnection'
   - group: secrets
 
 stages:
