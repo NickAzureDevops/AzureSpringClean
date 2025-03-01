@@ -47,7 +47,7 @@ resource "azurerm_public_ip" "linuxservers" {
 
   tags = {
     environment = "demo"
-    application = "azurespringclean" 
+    application = "azurespringclean"  # Add any other required tags here
   }
 }
 

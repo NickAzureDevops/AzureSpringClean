@@ -32,6 +32,11 @@ deploy_assignment() {
   local assignment_name=$(basename "${assignment}" .json)
   local policy_definition_id=$(jq -r '.properties.policyDefinitionId' "${assignment}")
 
+  if [ -z "$policy_definition_id" ]; then
+    echo "Error: policyDefinitionId is empty for assignment: ${assignment}"
+    exit 1
+  fi
+
   echo "Deploying assignment: ${assignment}"
   echo "Assignment name: $assignment_name"
   echo "Policy definition ID: $policy_definition_id"
@@ -49,7 +54,9 @@ done
 
 # Deploy all assignments
 echo "Deploying Subscription Assignments"
+echo "ASSIGNMENTS_DIR: ${ASSIGNMENTS_DIR}"
 for assignment in $(find ${ASSIGNMENTS_DIR} -name '*.json' -type f); do
+  echo "Hello"
   deploy_assignment "${assignment}"
 done
 
