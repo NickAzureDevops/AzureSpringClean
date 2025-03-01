@@ -2,7 +2,7 @@ const http = require('http');
 const url = require('url');
 
 // Vulnerability: Hardcoded API key
-const apiKey = '12345-ABCDE-SECRET-KEY';
+const apiKey = 'InstrumentationKey=248ccf4a-507c-4a7f-b392-0715dbe12cb7;IngestionEndpoint=https://uksouth-0.in.applicationinsights.azure.com/;LiveEndpoint=https://uksouth.livediagnostics.monitor.azure.com/;ApplicationId=8ad3e79d-5359-4635-872e-17664bf437b7';
 
 const server = http.createServer((req, res) => {
     const queryObject = url.parse(req.url, true).query;
@@ -19,3 +19,5 @@ server.listen(3000, () => {
     console.log('Server running at http://localhost:3000/');
     console.log(`Using API Key: ${apiKey}`);
 });
+
+
