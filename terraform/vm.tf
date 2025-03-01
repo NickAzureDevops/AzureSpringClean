@@ -7,13 +7,15 @@ resource "azurerm_windows_virtual_machine" "vm" {
   name                = "azurespringclean2025-vm"
   resource_group_name = azurerm_resource_group.this.name
   location            = var.location
-  size                = "Standard_DS1_v2"
+  size                = "Standard_B1s"
 
-  admin_username = adminuser
+  admin_username = var.adminuser
   admin_password = var.admin_password
+  computer_name  = "AzSpringClean"
+
 
   network_interface_ids = [
-    azurerm_network_interface.example.id,
+    azurerm_network_interface.nic.id,
   ]
 
   os_disk {
