@@ -9,12 +9,12 @@ export ASSIGNMENTS_DIR="$3"
 deploy_policy() {
   local policy=$1
   local policy_name=$(basename "${policy}" .json)
-  local display_name=$(grep -Po '"displayName":.*?[^\\]",' "${policy}" | sed 's/"displayName": "\(.*\)",/\1/')
+  local display_name=$(jq -r '.properties.displayName' "${policy}")
 
   echo "Validating policy: ${policy}"
-  if grep -q '"policyRule":' "${policy}" && grep -q '"parameters":' "${policy}"; then
-    local policy_rule=$(grep -Po '"policyRule":.*?[^\\]",' "${policy}" | sed 's/"policyRule": "\(.*\)",/\1/')
-    local parameters=$(grep -Po '"parameters":.*?[^\\]",' "${policy}" | sed 's/"parameters": "\(.*\)",/\1/')
+  if jq -e '.properties.policyRule' "${policy}" >/dev/null && jq -e '.properties.parameters' "${policy}" >/dev/null; then
+    local policy_rule=$(jq -c '.properties.policyRule' "${policy}")
+    local parameters=$(jq -c '.properties.parameters' "${policy}")
     echo "Creating policy definition: $display_name"
     az policy definition create --name $policy_name --rules "${policy_rule}" --params "${parameters}" --mode All --display-name "${display_name}" --description "Policy from ${policy}" || {
       echo "Error: Failed to create policy definition: $display_name"
@@ -30,12 +30,7 @@ deploy_policy() {
 deploy_assignment() {
   local assignment=$1
   local assignment_name=$(basename "${assignment}" .json)
-  local policy_definition_id=$(grep -Po '"policyDefinitionId":.*?[^\\]",' "${assignment}" | sed 's/"policyDefinitionId": "\(.*\)",/\1/')
-
-  if [ -z "$policy_definition_id" ]; then
-    echo "Error: policyDefinitionId is empty for assignment: ${assignment}"
-    exit 1
-  fi
+  local policy_definition_id="/subscriptions/$SUB/providers/Microsoft.Authorization/policyDefinitions/${assignment_name}"
 
   echo "Deploying assignment: ${assignment}"
   echo "Assignment name: $assignment_name"
@@ -54,8 +49,7 @@ done
 
 # Deploy all assignments
 echo "Deploying Subscription Assignments"
-echo "ASSIGNMENTS_DIR: ${ASSIGNMENTS_DIR}"
-for assignment in $(find ${ASSIGNMENTS_DIR} -name '*.json' -type f); do
+for assignment in $(find ${ASSIGNMENTS_DIR} -name '*.json' -type f ); do
   deploy_assignment "${assignment}"
 done
 
