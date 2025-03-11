@@ -57,7 +57,7 @@ echo "Deploying Subscription Assignments"
 for assignment in $(find ${ASSIGNMENTS_DIR} -name '*.json' -type f); do
   assignment_name=$(basename "${assignment}")
   echo "Processing assignment file: ${assignment_name}"
-  # deploy_assignment "${assignment}"
+  deploy_assignment "${assignment}"
 done
 
 echo "All assignments deployed successfully"
