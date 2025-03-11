@@ -55,7 +55,8 @@ deploy_assignment() {
 # Deploy all assignments
 echo "Deploying Subscription Assignments"
 for assignment in $(find ${ASSIGNMENTS_DIR} -name '*.json' -type f); do
-  echo "Hello World ${assignment}"
+  assignment_name=$(basename "${assignment}")
+  echo "Processing assignment file: ${assignment_name}"
   # deploy_assignment "${assignment}"
 done
 
