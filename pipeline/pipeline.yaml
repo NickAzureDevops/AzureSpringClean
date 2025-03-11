@@ -3,7 +3,7 @@ trigger:
 
 variables:
   policiesDirectory: "$(System.DefaultWorkingDirectory)/policies/"
-  assignmentsDirectory: "$(System.DefaultWorkingDirectory)/assignments"
+  assignmentsDirectory: "$(System.DefaultWorkingDirectory)/assignments/subscriptions"
   serviceConnection: 'ServiceConnection'
   subscriptionId: '14a92e37-f24d-48ee-a857-6e2dcbbadc09'
 
@@ -26,7 +26,7 @@ stages:
             scriptType: 'bash'
             scriptLocation: 'scriptPath'
             scriptPath: 'pipeline-scripts/deploy-policies.sh'
-            arguments: '$(subscriptionId) $(policiesDirectory) $(assignmentsDirectory)'
+            arguments: '$(subscriptionId) $(policiesDirectory) $(assignmentsDirectory)/$(subscriptionId)'
 
         - task: AzureCLI@2
           displayName: 'Trigger Compliance Scan'
