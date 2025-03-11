@@ -51,8 +51,9 @@ deploy_assignment() {
 # Deploy all assignments
 echo "Deploying Subscription Assignments"
 for assignment in $(find ${ASSIGNMENTS_DIR} -name '*.json' -type f); do
-echo "Hello World $(assignment)"
-  # deploy_assignment "${assignment}"
+  echo "Hello World ${assignment}"
+  deploy_assignment "${assignment}"
 done
 
+echo "All assignments deployed successfully"
 echo "Script completed successfully"
