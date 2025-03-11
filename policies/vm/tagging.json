@@ -69,8 +69,5 @@
         "effect": "deny"
       }
     }
-  },
-  "id": "/providers/Microsoft.Management/managementGroups/Demo/providers/Microsoft.Authorization/policyDefinitions/ASCTagging",
-  "type": "Microsoft.Authorization/policyDefinitions",
-  "name": "ASCTagging"
+  }
 }
