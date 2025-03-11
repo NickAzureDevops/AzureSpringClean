@@ -30,8 +30,8 @@ export ASSIGNMENTS_DIR="$3"
 deploy_assignment() {
   echo "deploying assingment"
   local assignment=$1
-  local assignment_name=$(basename "${assignment_name}" .json)
-  local policy_definition_id="/subscriptions/$SUB/providers/Microsoft.Authorization/policyDefinitions/${assignment_name}"
+  local assignment_name=$(basename "${assignment}" .json)
+  local policy_definition_id="/subscriptions/$SUB/providers/Microsoft.Authorization/policyDefinitions/${assignment}"
 
   echo "Deploying assignment: ${assignment}"
   echo "Assignment name: $assignment_name"
