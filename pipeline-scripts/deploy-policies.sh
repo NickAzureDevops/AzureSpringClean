@@ -1,6 +1,4 @@
 #!/bin/bash
-set -ex
-
 export SUB="$1"
 export POLICIES_DIR="$2"
 export ASSIGNMENTS_DIR="$3"
