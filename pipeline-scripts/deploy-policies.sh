@@ -28,19 +28,22 @@ export ASSIGNMENTS_DIR="$3"
 
 # Function to deploy a single assignment
 deploy_assignment() {
-  echo "deploying assingment"
+  echo "deploying assignment"
   local assignment=$1
   local assignment_name=$(basename "${assignment}" .json)
-  local policy_definition_id="/subscriptions/$SUB/providers/Microsoft.Authorization/policyDefinitions/${assignment}"
+  local policy_definition_id=$(jq -r '.properties.policyDefinitionId' "${assignment}")
   local display_name=$(jq -r '.properties.displayName' "${assignment}")
 
+  if [ -z "$policy_definition_id" ]; then
+    echo "Error: policyDefinitionId is empty for assignment: ${assignment}"
+    exit 1
+  fi
 
   echo "Deploying assignment: ${assignment}"
   echo "Assignment name: $assignment_name"
   echo "Policy definition ID: $policy_definition_id"
   echo "Display name: $display_name"
-  az policy assignment create --name "$assignment_name" --policy "$policy_definition_id" --scope "/subscriptions/$SUB" --display-name "$display_name" || 
-  {
+  az policy assignment create --name "$assignment_name" --policy "$policy_definition_id" --scope "/subscriptions/$SUB" --display-name "$display_name" || {
     echo "Error: Failed to create policy assignment: $assignment_name"
     exit 1
   }
