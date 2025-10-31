@@ -7,7 +7,10 @@ const apiKey2 = process.env.AZURE_STORAGE_SAS_TOKEN || '';
 
 const server = http.createServer((req, res) => {
     const queryObject = url.parse(req.url, true).query;
-    const name = queryObject.name || 'World';
+    const rawName = queryObject.name || 'World';
+    
+    // Sanitize input: remove control characters and limit length
+    const name = String(rawName).replace(/[\x00-\x1F\x7F-\x9F]/g, '').substring(0, 100);
 
     // Fixed: Use template literal instead of eval for performance and security
     const greeting = `Hello, ${name}!`;
