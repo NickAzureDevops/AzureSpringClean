@@ -35,11 +35,19 @@ stages:
             scriptType: 'bash'
             scriptLocation: 'inlineScript'
             inlineScript: |
+              # Optimize: Use parallel with better resource control
+              # Get resource groups efficiently
               resourceGroups=$(az group list --subscription $(subscriptionId) --query "[].name" -o tsv)
-              for rg in $resourceGroups; do
-                az policy state trigger-scan --resource-group $rg &
-              done
-              wait
+              
+              if [ -z "$resourceGroups" ]; then
+                echo "No resource groups found, skipping compliance scan"
+                exit 0
+              fi
+              
+              # Use xargs for controlled parallel execution (max 4 concurrent)
+              echo "$resourceGroups" | xargs -P 4 -I {} sh -c 'az policy state trigger-scan --resource-group "{}" || echo "Failed to scan: {}"'
+              
+              echo "Compliance scan triggered for all resource groups"
 
 - stage: deploy_security_devops
   displayName: 'Deploy Security DevOps'

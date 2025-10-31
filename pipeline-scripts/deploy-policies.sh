@@ -7,32 +7,39 @@ export ASSIGNMENTS_DIR="$3"
 deploy_policy() {
   local policy=$1
   local policy_name=$(basename "${policy}" .json)
-  local display_name=$(jq -r '.properties.displayName' "${policy}")
-
+  
   echo "Validating policy: ${policy}"
-  if jq -e '.properties.policyRule' "${policy}" >/dev/null && jq -e '.properties.parameters' "${policy}" >/dev/null; then
-    local policy_rule=$(jq -c '.properties.policyRule' "${policy}")
-    local parameters=$(jq -c '.properties.parameters' "${policy}")
-    echo "Creating policy definition: $display_name"
-    az policy definition create --name $policy_name --rules "${policy_rule}" --params "${parameters}" --mode All --display-name "${display_name}" --description "Policy from ${policy}" || {
-      echo "Error: Failed to create policy definition: $display_name"
-      exit 1
-    }
-  else
+  # Optimize: Parse JSON once and extract all needed fields
+  local json_data=$(jq -c '{displayName: .properties.displayName, policyRule: .properties.policyRule, parameters: .properties.parameters}' "${policy}")
+  
+  local display_name=$(echo "${json_data}" | jq -r '.displayName')
+  local policy_rule=$(echo "${json_data}" | jq -c '.policyRule')
+  local parameters=$(echo "${json_data}" | jq -c '.parameters')
+  
+  # Validate required fields exist
+  if [ "${policy_rule}" = "null" ] || [ "${parameters}" = "null" ]; then
     echo "Error: Policy file ${policy} does not have a valid 'policyRule' or 'parameters' field."
     exit 1
   fi
+  
+  echo "Creating policy definition: $display_name"
+  az policy definition create --name $policy_name --rules "${policy_rule}" --params "${parameters}" --mode All --display-name "${display_name}" --description "Policy from ${policy}" || {
+    echo "Error: Failed to create policy definition: $display_name"
+    exit 1
+  }
 }
 
 # Function to deploy a single assignment
 deploy_assignment() {
-  echo "deploying assignment"
   local assignment=$1
   local assignment_name=$(basename "${assignment}" .json)
-  local policy_definition_id=$(jq -r '.properties.policyDefinitionId' "${assignment}")
-  local display_name=$(jq -r '.properties.displayName' "${assignment}")
+  
+  # Optimize: Parse JSON once and extract both needed fields
+  local json_data=$(jq -c '{policyDefinitionId: .properties.policyDefinitionId, displayName: .properties.displayName}' "${assignment}")
+  local policy_definition_id=$(echo "${json_data}" | jq -r '.policyDefinitionId')
+  local display_name=$(echo "${json_data}" | jq -r '.displayName')
 
-  if [ -z "$policy_definition_id" ]; then
+  if [ -z "$policy_definition_id" ] || [ "$policy_definition_id" = "null" ]; then
     echo "Error: policyDefinitionId is empty for assignment: ${assignment}"
     exit 1
   fi
