@@ -9,12 +9,10 @@ deploy_policy() {
   local policy_name=$(basename "${policy}" .json)
   
   echo "Validating policy: ${policy}"
-  # Optimize: Parse JSON once and extract all needed fields
-  local json_data=$(jq -c '{displayName: .properties.displayName, policyRule: .properties.policyRule, parameters: .properties.parameters}' "${policy}")
+  # Optimize: Use jq once with multiple outputs for maximum efficiency
+  local json_output=$(jq -r '.properties | "\(.displayName)|\(.policyRule | @json)|\(.parameters | @json)"' "${policy}")
   
-  local display_name=$(echo "${json_data}" | jq -r '.displayName')
-  local policy_rule=$(echo "${json_data}" | jq -c '.policyRule')
-  local parameters=$(echo "${json_data}" | jq -c '.parameters')
+  IFS='|' read -r display_name policy_rule parameters <<< "${json_output}"
   
   # Validate required fields exist
   if [ "${policy_rule}" = "null" ] || [ "${parameters}" = "null" ]; then
@@ -34,10 +32,10 @@ deploy_assignment() {
   local assignment=$1
   local assignment_name=$(basename "${assignment}" .json)
   
-  # Optimize: Parse JSON once and extract both needed fields
-  local json_data=$(jq -c '{policyDefinitionId: .properties.policyDefinitionId, displayName: .properties.displayName}' "${assignment}")
-  local policy_definition_id=$(echo "${json_data}" | jq -r '.policyDefinitionId')
-  local display_name=$(echo "${json_data}" | jq -r '.displayName')
+  # Optimize: Use jq once with multiple outputs for maximum efficiency
+  local json_output=$(jq -r '.properties | "\(.policyDefinitionId)|\(.displayName)"' "${assignment}")
+  
+  IFS='|' read -r policy_definition_id display_name <<< "${json_output}"
 
   if [ -z "$policy_definition_id" ] || [ "$policy_definition_id" = "null" ]; then
     echo "Error: policyDefinitionId is empty for assignment: ${assignment}"
