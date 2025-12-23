@@ -21,7 +21,7 @@ The pipeline settings (Defender for DevOps).
 The deployed resources for any security issues or misconfigurations.
 If a problem is found, alerts are logged in Defender for Cloud, and Azure Policy Compliance will generate new recommendations in the Defender for Cloud Console.
 
-🚀 Deployment Instructions
+## Deployment Instructions
 
 This project can be deployed in two main ways:
 
@@ -105,7 +105,7 @@ terraform destroy -var="admin_password=<your-secure-password>"
 **Infrastructure (Terraform):**
 - Resource Group: `AzureSpringClean2025` in UK South
 - Virtual Network with subnet
-- Linux Virtual Machine (Ubuntu 18.04 LTS, Standard_B1s)
+- Linux Virtual Machine (Ubuntu 18.04 LTS, Standard_B1s) - *Note: Consider updating to Ubuntu 22.04 LTS or newer for continued security support*
 - Public IP address
 - Network interface
 
