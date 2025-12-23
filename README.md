@@ -21,6 +21,106 @@ The pipeline settings (Defender for DevOps).
 The deployed resources for any security issues or misconfigurations.
 If a problem is found, alerts are logged in Defender for Cloud, and Azure Policy Compliance will generate new recommendations in the Defender for Cloud Console.
 
+🚀 Deployment Instructions
+
+This project can be deployed in two main ways:
+
+### Prerequisites
+- An Azure subscription
+- Azure CLI installed and configured
+- Terraform installed (latest version recommended)
+- Azure DevOps organization with an active project
+- Service Principal or Managed Identity with appropriate permissions
+- An Azure storage account for Terraform state (for remote state backend)
+
+### Option 1: Deploy via Azure Pipelines (Recommended)
+
+#### 1. Setup Azure Pipeline for Policies
+
+1. Navigate to your Azure DevOps project
+2. Create a new pipeline using the `pipeline/pipeline.yaml` file
+3. Configure the following variables:
+   - `serviceConnection`: Name of your Azure service connection
+   - `subscriptionId`: Your Azure subscription ID
+4. Run the pipeline to deploy:
+   - Azure Policy definitions from the `policies/` directory
+   - Policy assignments from the `assignments/` directory
+   - Microsoft Defender for DevOps security scanning
+
+#### 2. Setup Azure Pipeline for Infrastructure
+
+1. Create another pipeline using the `pipeline/deploy.yaml` file
+2. Configure the following variables:
+   - `serviceConnection`: Name of your Azure service connection
+   - `backendAzureRmResourceGroupName`: Resource group for Terraform state
+   - `backendAzureRmStorageAccountName`: Storage account for Terraform state
+   - `backendAzureRmContainerName`: Container name (default: `tfstate`)
+3. Add a variable group named `secrets` with the following variable:
+   - `admin_password`: VM admin password (mark as secret)
+4. Run the pipeline with parameters:
+   - Set `apply: true` to deploy infrastructure
+   - Set `destroy: true` to tear down infrastructure
+   - Leave both false for plan-only mode
+
+### Option 2: Deploy Locally
+
+#### Deploy Azure Policies Manually
+
+```bash
+# Login to Azure
+az login
+
+# Set your subscription
+az account set --subscription <your-subscription-id>
+
+# Deploy policies using the script
+./pipeline-scripts/deploy-policies.sh <subscription-id> ./policies/ ./assignments/subscriptions/<subscription-id>
+```
+
+#### Deploy Infrastructure with Terraform
+
+```bash
+# Navigate to terraform directory
+cd terraform
+
+# Initialize Terraform (configure backend or use local state)
+terraform init
+
+# Plan the deployment
+terraform plan -var="admin_password=<your-secure-password>"
+
+# Apply the deployment
+terraform apply -var="admin_password=<your-secure-password>"
+
+# To destroy resources
+terraform destroy -var="admin_password=<your-secure-password>"
+```
+
+### What Gets Deployed
+
+**Azure Policies:**
+- VM tagging requirements policy
+- Public IP denial policy
+
+**Infrastructure (Terraform):**
+- Resource Group: `AzureSpringClean2025` in UK South
+- Virtual Network with subnet
+- Linux Virtual Machine (Ubuntu 18.04 LTS, Standard_B1s)
+- Public IP address
+- Network interface
+
+**Security:**
+- Microsoft Defender for DevOps scanning
+- CodeQL analysis for JavaScript code
+- Dependency scanning
+
+### Configuration Options
+
+You can customize the deployment by modifying:
+- `terraform/variable.tf`: Change location, admin username
+- `policies/`: Add or modify policy definitions
+- `assignments/`: Add or modify policy assignments
+
 👥 Contributors
 Jakub Fras – Cloud Security Consultant
 Linkedin: https://www.linkedin.com/in/jakub-fras/
